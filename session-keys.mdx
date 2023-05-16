@@ -1,0 +1,35 @@
+export const description =
+  'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
+
+# Session Keys
+In the realm of blockchain-powered games, managing session keys can be a crucial aspect of securing player accounts and maintaining game integrity. Session keys are used to authenticate players and authorize their actions within the game.
+
+Openfort has developed a robust internal infrastructure for handling session keys, ensuring secure and seamless player authentication. This infrastructure includes automated systems for generating, managing, and validating session keys, all managed through Openfort APIs.
+
+## Overview
+
+<Note>
+  <strong>Session Keys </strong>
+  <br /> Coming Soon
+</Note>
+
+Session keys are cryptographic keys used to establish a secure connection between a player's device and the game server. They are generated during the player's login process and are used to authenticate subsequent requests from the player's device. Session keys are short-lived and typically expire after a certain period of inactivity or when the player logs out.
+
+![SessionKeys.excalidraw.svg](https://blog-cms.openfort.xyz/uploads/Session_Keys_excalidraw_3f37ce39f1.svg)
+
+## How Session Keys Work
+When a player logs in to the game, Openfort's infrastructure generates a session key for that player. The session key is securely transmitted to the player's device and stored locally. Subsequent requests from the player's device to the game server are authenticated using the session key. Openfort's infrastructure validates the session key and verifies the player's identity before processing the request. Incorporating session tokens into games user interfaces offers several advantages:
+1. Enhanced Security: Utilizing session tokens minimizes exposure of a user's private key during transactions, lowering the risk of key theft.
+2. Reduced Transaction Signing: Users only need to sign one transaction when establishing a session, as opposed to multiple transactions for every individual action.
+3. Improved User Experience: With fewer transactions to sign, users can enjoy a smoother and quicker experience when interacting with a dApp.
+
+## Creating and Managing Session Keys
+To create and manage session keys in your game, follow these steps:
+
+- When a player logs in, generate a session key using a secure random number generator.
+- Transmit the session key securely to the player's device, for example by encrypting it with the player's password or using secure communication protocols.
+- Store the session key securely on the player's device, such as in a secure storage or encrypted memory.
+- Include the session key in subsequent requests from the player's device to the game server for authentication.
+- On the game server, validate the session key and verify the player's identity before processing the request.
+- Periodically refresh the session key during the player's session to maintain security.
+- Invalidate the session key when the player logs out or after a certain period of inactivity.

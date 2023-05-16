@@ -1,0 +1,65 @@
+export const description =
+  'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
+
+# Execute transactions
+
+In the realm of blockchain-powered games, managing transactions at scale can be a significant challenge. Transactions are updates to data on the blockchain and are used in games for various purposes, such as adjusting player currency, granting items, and enabling crafting.
+
+## Overview
+
+Openfort transactions are executed from a smart contract wallet. Transactions also called `transaction_intent` are the best way to track the status and details of each one.
+
+Openfort has developed a robust internal infrastructure capable of handling over 10,000 transactions per second, per game. This infrastructure includes automated systems for both gasless and non-gasless transactions, which are seamlessly managed through Openfort APIs when players interact with the game.
+
+## How transactions work
+
+Transactions are executed by sending a signed transaction request to the Openfort API. The transaction request contains necessary information such as the sender's address, recipient's address, and transaction data. Openfort's infrastructure verifies the transaction request, updates the blockchain data accordingly, and returns a transaction hash as proof of the transaction.
+
+![transactionIntent](https://blog-cms.openfort.xyz/uploads/Backed_APISDK_excalidraw_3_57642c9d67.svg)
+## Simple transaction
+
+To execute a simple transaction via the Openfort API, follow these steps:
+
+- Create a transaction object with the necessary details, such as sender's address, recipient's address, and transaction data.
+- Sign the transaction object with the private key of the sender's account.
+- Send the signed transaction object to the Openfort API using the appropriate endpoint.
+- Openfort's infrastructure will verify the transaction, update the blockchain data, and return a transaction hash as proof of the transaction.
+
+As an example we can execute a minting of an asset via a simple transaction call:
+
+<CodeGroup title="Execute a simple transaction" tag="POST" label="/v1/transaction_intents">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/transaction_intent \
+      -u YOUR_SECRET_KEY: \
+      -d player="pla_42510499-0739-5813-bcf6-850bb91e935b" \
+      -d chain_id=5 \
+      -d interactions[0].contract="con_368cd42e-d9da-4c88-8d98-350af52c4ea0" \
+      -d interactions[0].function_name="mint" \
+      -d interactions[0].function_args[0]="0x63B7dCD88658f0609adDac08Cfae6538f084484f"
+    ```
+
+</CodeGroup>
+
+## Batched transactions
+
+One of the many advantages of smart contract wallets is the ability to execute multiple transactions as a single batch. With batch transactions, you can save time and reduce gas costs by submitting multiple operations at once.
+
+Batch transactions are also safer, thanks to a property known as "atomicity." This means that either all transactions within the batch will execute or none of them will, ensuring that your operations are executed seamlessly without any room for errors.
+
+<CodeGroup title="Execute a batch transaction" tag="POST" label="/v1/transaction_intents">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/transaction_intent \
+      -u YOUR_SECRET_KEY: \
+      -d player="pla_42510499-0739-5813-bcf6-850bb91e935b" \
+      -d chain_id=5 \
+      -d interactions[0].contract="con_368cd42e-d9da-4c88-8d98-350af52c4ea0" \
+      -d interactions[0].function_name="mint" \
+      -d interactions[0].function_args[0]="0x63B7dCD88658f0609adDac08Cfae6538f084484f" \
+      -d interactions[1].contract="con_368cd42e-d9da-4c88-8d98-350af52c4ea0" \
+      -d interactions[1].function_name="mint" \
+      -d interactions[1].function_args[0]="0x63B7dCD88658f0609adDac08Cfae6538f084484f"
+    ```
+
+</CodeGroup>

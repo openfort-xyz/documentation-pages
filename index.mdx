@@ -1,0 +1,39 @@
+import { Guides } from '@/components/Guides'
+import { Resources } from '@/components/Resources'
+import { HeroPattern } from '@/components/HeroPattern'
+
+export const description =
+  'Learn everything there is to know about the Openfort API and integrate Openfort into your product.'
+
+export const sections = [
+  { title: 'Guides', id: 'guides' },
+  { title: 'Resources', id: 'resources' },
+]
+
+<HeroPattern />
+
+# Documentation
+
+Below you'll find guides that will teach you how to use Openfort, and reference documentation for all the moving parts.
+
+<div className="not-prose mb-16 mt-6 flex gap-3">
+  <Button href="/quickstart" arrow="right" children="Quickstart" />
+  <Button href="/libraries" variant="outline" children="Explore SDKs" />
+</div>
+
+## Getting started {{ anchor: false }}
+
+To get started, create a new application in your [developer settings](https://dashboard.openfort.xyz), then read about how to make requests for the resources you need to access using our HTTP APIs or dedicated client SDKs. {{ className: 'lead' }}
+
+<div className="not-prose">
+  <Button
+    href="https://dashboard.openfort.xyz"
+    variant="text"
+    arrow="right"
+    children="Get your API key"
+  />
+</div>
+
+<Guides />
+
+<Resources />

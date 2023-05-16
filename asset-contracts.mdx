@@ -1,0 +1,69 @@
+export const description =
+  'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
+
+# Asset Contract
+
+In a blockchain game, assets refer to various in-game items, currencies, lootboxes, and other virtual goods that hold value within the game economy. Asset management is a crucial aspect of a blockchain game, as it involves the creation, verification, and delegation of assets to enable various functionalities within the game.
+
+## Overview
+
+Asset management is important in a blockchain game as it allows players to easily manage their in-game assets. These assets may have different on-chain actions associated with them, such as buying, selling, trading, or using them in-game. Additionally, asset management may involve interactions with external item contracts or marketplaces.
+
+In a blockchain game, different types of assets and asset support are crucial, including:
+
+- In-game items: These are virtual items that players can acquire, trade, or use within the game. Examples include weapons, armor, or virtual pets.
+- In-game currencies: These are virtual currencies that players can use to purchase items or services within the game. Examples include gold, gems, or tokens specific to the game's economy.
+
+## How do assets work?
+
+Assets in a blockchain game are typically represented as smart contracts on the blockchain. These smart contracts contain the logic and data associated with the assets, including ownership, transferability, and functionality. Players can interact with these smart contracts to acquire, trade, and use the assets within the game.
+
+Asset contracts are encompassed of several functions (ie. minting, transfer, etc.) to enable different features within the game. For example, a smart contract for an in-game item may include functionality for transferring ownership, upgrading the item, or being staked in the gameplay. Similarly, an asset contract for an in-game currency may include functionality for transferring, exchanging, or using the currency for in-game purchases.
+
+Openfort supports your own asset contracts:
+- External Item Contract Support: This involves interacting with external smart contracts that govern the behavior of in-game items, such as their attributes, properties, or functionality.
+- External Marketplace Support: This involves interacting with external marketplaces where players can buy, sell, or trade in-game assets with other players.
+
+## Asset verification
+To create and manage assets in a blockchain game, developers need to verify the smart contracts associated with the assets. Verification ensures that the smart contracts are legitimate, secure, and compatible with the game's mechanics.
+
+Create a new contract by clicking the `Add` button in the "Asset" section, then enter:
+
+- The name of the contract (it can be any name you want; the name is only for identification purposes)
+- The address of the contract.
+- The ABI of the contract.
+- The network where the smart contract is located.
+
+You can obtain the ABI of a contract in several ways, such as through manual entry or by consulting your developers if the ABI is not verified.
+
+You can also "Add an asset" by using your terminal:
+
+<CodeGroup title="Create a contract of an asset" tag="POST" label="/v1/contracts">
+
+    ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/accounts \
+      -u YOUR_SECRET_KEY: \
+      -d player="pla_42510499-0739-5813-bcf6-850bb91e935b" \
+      -d chain_id=5
+    ```
+
+    </CodeGroup>
+
+Check the guide on [Execute Transaction](/execute-transactions) if you're now looking to mint and transfer the asset into an account. 
+
+## Asset delegation
+
+<Note>
+  <strong>Asset Delegation </strong>
+  <br /> Coming Soon
+</Note>
+
+Because Openforts' wallets are smart contracts, you can delegate their execution to other contracts via `delegatecall`.
+
+Allowing you to delegate other wallets to make permissioned tx's/contract calls on your behalf in a constrained and/or timelocked way.
+
+This unlocks:
+- Subscriptions 
+- Escrow systems
+- Lots of other stuff
+

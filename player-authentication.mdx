@@ -1,0 +1,43 @@
+export const description =
+  'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
+
+# Player authentication
+
+Openfort offers a "bring-your-own" authentification solution to handle your player authentication, registration and wallet connection flows.
+As game owners, you have the freedom to choose what's the optimal configuration for your players and easily integrate with different auth providers.
+
+## Overview
+
+With Openfort's powerful authentification module you can fully brand the look and feel of your game's auth page. You can configure your auth page for a number of different use cases. These include player login, registration and external wallet connections.
+
+## How player authentication works
+
+<Note>
+  <strong>V0.1 - Create Accounts with User IDs </strong>
+  <br /> Work in progress.
+</Note>
+
+If you simply want to create blockchain accounts for each user, you can create custodial Openfort Wallets that are identified by unique identifiers (IDs) from your game.
+
+![AgnosticProvider.svg](https://blog-cms.openfort.xyz/uploads/Agnostic_Provider_a34834ab91.svg)
+
+## Signer agnostic account management
+
+With the rise of wallet authentifications, there is an increasing demand for more convenient veriication methods. At Openfort,
+we position outselves agnostics to the type of method used to verify the ownership of private keys. That's why we support methods that range from
+a simple Key Management Service (KMS) to more complex split of keys with Multi-Party Computation (MPC).
+
+Openfort will soon be ready to support many ways to crearte smart accounts. Here is a short list to choose the right one for you:
+
+- If your game already have an existing Web2 account system and want to create account with user IDs.
+- If you want to onbaord new user via socia logins.
+- If you're already managing private keys and want to create wallets with the private keys.
+- If you want to bring your own auth login experience and want to create accounts via RPC provider.
+
+## Account flexibility
+
+Openfort allows users to move from "care-less" to "care-full" scenarios. Starting from a smart account with only one signature.
+![UserFlowOnboarding.svg](https://blog-cms.openfort.xyz/uploads/User_Flow_Onboarding_5eb02a5945.svg)
+
+Your players will be able to later on secure their smart contract wallets and regain ownership as they see fit.
+![AccountDecentralization.svg](https://blog-cms.openfort.xyz/uploads/Account_Decentralization_39a5c97ad7.svg)
