@@ -1,80 +1,57 @@
 export const description =
   'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
 
-# Gas Policies
+# Gas policies
 
-Contract policies enable you to define the contracts and functions that your users can interact with without incurring gas costs. By specifying these policies, you can control the access and usage of your smart contracts.
+Gas policies enable you to define the contracts and functions that your users can interact with without incurring gas costs. By specifying these policies, you can control the way your players interact with the in-game items and currencies. 
 
 ## Overview
-
-To use contract policies, you first need to add your Asset Contract. This will automatically create a Gas Policy with default parameters that you can modify according to your needs.
+By default, users are responsible for paying their own gas fees. However, you have the option to sponsor specific transactions or even cover all gas fees on behalf of your users. This document will guide you through the process of setting up gas policies to ensure a secure and controlled sponsorship approach.
 
 This opens up a world of possibilities, including:
 
 - New users can perform on-chain actions without having to acquire the native network token first.
 - Games can cover gas fees for their users to encourage adoption.
-- Sponsors can allow users to pay for gas using a stablecoin like USDC or any other ERC20 token (e.g., in-game token).
-- Users can maintain privacy by charging gas fees to an account not associated with them.
+- Sponsors can allow users to pay for gas using a stablecoin like USDC or any other ERC20 token (ie. in-game token).
+- You could sponsor actions that imply an improvement on your game adoptions but leave it for users to pay actions that require leaving your gaming ecosystem.
 
-## Create a Policy
+## How gas policies work
 
-You can use contract policies to specify the contracts and functions that you want your users to interact with without paying gas fees. Once you add your asset contract, a gas policy is automatically created with default parameters that you can modify to suit your needs.
+You can use gas policies to specify the contracts and functions that you want your users to interact with without paying gas fees.
 
 ![GasSponsorship.svg](https://blog-cms.openfort.xyz/uploads/Gas_Sponsorship_49fd2dd651.svg)
 
 <Note>
-  <strong>Gas sponsorship:</strong>
-  <br /> Keep in mind that sponsoring all transactions can be risky, as it leaves your funds vulnerable to potential abuse. By setting up gas policies, you can carefully control which transactions you're willing to sponsor and keep your funds safe.
+<strong>Add an asset contract</strong>
+  <br />To use contract policies, you first need to add your Asset Contract. This will automatically create a Gas Policy with default parameters that you can later modify.
 </Note>
 
-To set up gas sponsorship programmatically, check out our API documentation. Otherwise, follow along with our tutorial by navigating to the Gas Sponsorship section of your dashboard.
+To set up your first gas sponsorship navigate first to the [Gas Policies tab](https://dashboard.openfort.xyz/policies). Then click on the top right button `Add sponsor` to start filling the Sponsor Information.
 
 ### Sponsor Strategy
+
 There are two types of sponsor strategies that you can implement:
 
-- Pay gas for users: In this strategy, you can pay gas fees for your users either partially or fully.
-- Charge gas in custom tokens: In this strategy, your users will pay gas fees, but instead of paying in ETH or the native gas token, they can pay in a custom ERC20 token that your application or protocol supports.
+- Pay gas for users: Pay gas fees on behalf of your users using the network token (ie. ETH, MUMBAI, AVAC, etc.).
+- Charge gas in custom tokens: Either the game or the players pays gas fees with any ERC20 token (ie. USDC, in-game token, etc.)
+
+![sponsorInfo](https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_11_at_19_39_03_min_f7f7f0c6c0.png)
 
 ### Spending Rules
-You can use the "Allowed Transactions" feature to specify which transactions you would like to sponsor gas for. 
+When selecting `Allowed Transactions` you can decide what asset contract you want to sponsor transactions from.  
 
-We highly encourage you to interact with the dashboard in order to define your own gas policy. Alternatively here is an example for your terminal:
+Then, select either all or specifics functions you want your policy to sponsor.
 
-    <CodeGroup title="Create a policy" tag="POST" label="/v1/policies">
+![spendingRules](https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_11_at_19_40_27_min_39199b4304.png)
 
-    ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/policies/ \
-      -u YOUR_SECRET_KEY: \
-      -d chain_id= 5 \
-      -d name="TEST" \
-      -d strategy="pay_per_user"
-    ```
+After add `Rate Limits` under the Policy model option. You can set up on or many limits. 
 
-    </CodeGroup>
+There are four types of rate limits:
 
-Then, you can select the functions that you want to sponsor from your asset contract, or select all functions.
+- Amount: limit by the amount of gas
+- Request: limit by the number of requests
+- Gas Price: limit by the curren gas price
+- Amount per txn: limit by the amount of gas per transaction
 
-    <CodeGroup title="Create Allow Function Policy" tag="POST" label="/v1/allow_functions">
-
-    ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/allow_functions \
-      -u YOUR_SECRET_KEY: \
-      -d contract="con_e4e89bfa-d791-405d-9074-624e040ee2df" \
-      -d type="Allowed transactions" \
-      -d function_name="mint" \
-      -d policy="pol_5223c22f-6453-4f63-8d08-7874e56963e1"
-    ```
-
-    </CodeGroup>
-
-### Rate Limits
-To prevent malicious users from exploiting the system, it's important to set up rate limits to restrict the number of transactions that you sponsor. You can create a new rate limit by clicking on the "+" sign under "Rate Limits." You can set up as many rate limits as you need. For instance, you can set limits on:
-
-- Policy duration: The length of time that your paymaster policy will remain effective.
-- Number of transactions covered for a recipient address.
-- Maximum USD amount.
-
-### Partial Sponsoring 
-Coming Soon
-
-<strong>With Openfort, you just have to put down a credit card, and we will charge you for gas at the end of every month.</strong>You can set up billing on the dashboard.
+## Policy example
+1. Sponsor up to 1 AVAX every hour for minting an in-game asset. 

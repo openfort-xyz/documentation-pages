@@ -2,11 +2,12 @@ export const description =
   'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
 
 # Session Keys
-In the realm of blockchain-powered games, managing session keys can be a crucial aspect of securing player accounts and maintaining game integrity. Session keys are used to authenticate players and authorize their actions within the game.
+In the realm of web3 games, managing session keys can be a crucial aspect of securing player accounts and maintaining game integrity. Session keys are used to authenticate players and authorize their actions within the game.
 
-Openfort has developed a robust internal infrastructure for handling session keys, ensuring secure and seamless player authentication. This infrastructure includes automated systems for generating, managing, and validating session keys, all managed through Openfort APIs.
 
 ## Overview
+
+Openfort has developed a robust internal infrastructure for handling session keys, ensuring secure and seamless player authentication. This infrastructure includes automated systems for generating, managing, and validating session keys, all managed through Openfort APIs.
 
 <Note>
   <strong>Session Keys </strong>
@@ -17,13 +18,13 @@ Session keys are cryptographic keys used to establish a secure connection betwee
 
 ![SessionKeys.excalidraw.svg](https://blog-cms.openfort.xyz/uploads/Session_Keys_excalidraw_3f37ce39f1.svg)
 
-## How Session Keys Work
+## How session keys work
 When a player logs in to the game, Openfort's infrastructure generates a session key for that player. The session key is securely transmitted to the player's device and stored locally. Subsequent requests from the player's device to the game server are authenticated using the session key. Openfort's infrastructure validates the session key and verifies the player's identity before processing the request. Incorporating session tokens into games user interfaces offers several advantages:
 1. Enhanced Security: Utilizing session tokens minimizes exposure of a user's private key during transactions, lowering the risk of key theft.
 2. Reduced Transaction Signing: Users only need to sign one transaction when establishing a session, as opposed to multiple transactions for every individual action.
 3. Improved User Experience: With fewer transactions to sign, users can enjoy a smoother and quicker experience when interacting with a dApp.
 
-## Creating and Managing Session Keys
+## Creating and managing session keys
 To create and manage session keys in your game, follow these steps:
 
 - When a player logs in, generate a session key using a secure random number generator.

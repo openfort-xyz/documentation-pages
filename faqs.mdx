@@ -1,0 +1,55 @@
+export const description =
+  'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
+
+# Frequently Asked Questions
+
+## Player authentification
+<strong> What are the seed parameters for account creation?</strong>
+Openfort uses a player ID and an index to seed new wallets, enabling the same players to have multiple accounts.
+
+<strong> Who controls the created accounts?</strong>
+Openfort offers flexible accounts, meaning you can move from custodial to self-custodial by rotating the keys. All depends on the game's decision on the [auth providers](/player-authentication).
+
+## Account management
+<strong> What's the difference between a wallet and an account?</strong>
+In the blockchain concept, an account is an address that represents the ownership of digital holdings. A wallet would be the combination of an account + UI.
+
+<strong> What is the relationship between account deployer and account owner?</strong>
+An account deployer signs the transaction to deploy the account (in this case Openfort), while the account owner has the authorization to initiate transactions, such as transferring or swapping tokens. 
+It is possible for account deployers to also authorize transactions if and only if the account owner authorizes it via a session key.
+
+<strong> Could players import/export their wallet/s with Openfort?</strong>
+Yes, upon registration, your players could connect with existing wallets and use that as an owner of the account. 
+It's possible to export accounts, but it's up to the game to let the players export those in-game accounts outside their ecosystem.
+
+<strong> What information is required to set an account owner?</strong>
+You need the player's ID, which can be the public key for an EOA or a unique identifier for a social account.
+
+<strong> What's Account Abstraction (AA)? How is Openfort leveraging this concept?</strong>
+Account Abstraction is a blockchain technology that allows users to use smart contracts as their accounts. 
+If you've ever tried to build Web3 apps with amazing user experiences you'll eventually hit road blocks that are imposed by the limitations of an EOA. In other words, the UX ceiling in terms of what you can achieve with an EOA is not very high.
+You can read more about AA [here](https://www.notion.so/alamaslabs/Openfort-resources-5a916e0099d94447a34bfa1dc4730d75?pvs=4).
+
+## Business model and vendor lock-in
+<strong> What happens if Openfort goes offline? Can players still access their accounts?</strong>
+In the unlikely event that Openfort becomes unavailable or goes out of business, users' funds will remain secure, and their accounts will still be fully functional. Some services tailored for developers might be affected, but the accounts created with Openfort can continue uninterrupted through non-trusted methods. This includes allowing developers to create accounts using only a public key and index, which are not dependent on Fun's operational status.
+
+<strong>What's Openfort's business model?</strong>
+Openfort is 100% free and our core services will always be free. Core services include everything we've released to date, and all future systems we release unless we explicitly state there is a pricing model behind these future systems. 
+Our future plans for integrating revenue models while keeping our core services free include the following: End-to-end premium hosting, offering cross-game interoperability and cash onramps solutions.
+
+## Gas sponsorship
+<strong> Can I use my own token (ERC20) to sponsor gas payments?</strong>
+Yes, you can currently sponsor fully or partially with the network token or ERC20. Learn more about gas sponsorship [here](https://www.openfort.xyz/blog/technical-dive-gas-sponsorship).
+
+<strong> Do I need to fund the created accounts?</strong>
+No, Openfort leverages the capacity to pay for transactions on behalf of the players. Therefore, players can interact with the blockchain directly without having to first obtain network tokens.
+Having said so, tyou could decide to airdrop a small amount of tokens per account created.
+
+## Asset contract
+<strong> What Smart Contracts (SC) can I interact with? Can I bring my own SC?</strong>
+You're free to user any standard ERC20, ERC721 and ERC1155 smart contracts you want. We encourage you to create and use your own smart contracts.
+You can learn how to easily interact with your SC [here](/asset-contracts).
+
+<strong> Will Smart Account creation add extra steps for users before interacting with the game?</strong>
+Smart Account addresses can be generated without deploying the smart contract on-chain, as they are counterfactual. The contract is deployed with the first user transaction.

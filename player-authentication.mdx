@@ -3,40 +3,147 @@ export const description =
 
 # Player authentication
 
-Openfort offers a "bring-your-own" authentification solution to handle your player authentication, registration and wallet connection flows.
-As game owners, you have the freedom to choose what's the optimal configuration for your players and easily integrate with different auth providers.
+Openfort Auth offers a "bring-your-own" authentication solution to handle your player's signup and login flows. 
 
 ## Overview
 
-With Openfort's powerful authentification module you can fully brand the look and feel of your game's auth page. You can configure your auth page for a number of different use cases. These include player login, registration and external wallet connections.
+There are two parts to every Auth system:
 
-## How player authentication works
-
-<Note>
-  <strong>V0.1 - Create Accounts with User IDs </strong>
-</Note>
-
-If you simply want to create blockchain accounts for each user, you can create custodial Openfort Wallets that are identified by unique identifiers (IDs) from your game.
+- Authentication: should this person be allowed in? If yes, who are they?
+- Authorization: once they are in, what are they allowed to do?
 
 ![AgnosticProvider.svg](https://blog-cms.openfort.xyz/uploads/Agnostic_Provider_a34834ab91.svg)
 
-## Signer agnostic account management
+Note: Once you've decided on your authentication flow, make sure to read more about [Authorization (Session Keys)](/session-keys).
 
-With the rise of wallet authentifications, there is an increasing demand for more convenient veriication methods. At Openfort,
-we position outselves agnostics to the type of method used to verify the ownership of private keys. That's why we support methods that range from
-a simple Key Management Service (KMS) to more complex split of keys with Multi-Party Computation (MPC).
+Openfort Auth is designed to combine your preferred onboarding flow with Openfort accounts. You can authenticate your players in several ways:
 
-Openfort will soon be ready to support many ways to crearte smart accounts. Here is a short list to choose the right one for you:
+- Email & password.
+- Magic links (one-click logins).
+- Social providers.
+- Phone logins -Coming soon.
 
-- If your game already have an existing Web2 account system and want to create account with user IDs.
-- If you want to onbaord new user via socia logins.
-- If you're already managing private keys and want to create wallets with the private keys.
-- If you want to bring your own auth login experience and want to create accounts via RPC provider.
+## How player authentication works
+
+Note: Openfort is not creating an account until there is a transaction being pushed. 
+
+Auth makes use of a server-side wallet to sign and verify JWTs. To create and/or a player's account you need a signer. A signer refers to any entity capable of cryptographically signing messages and transactions, which generally (though not exclusively) relies on an ECDSA private key. It is crucial to remember that the smart wallet's ownership belongs to the signer's owner. Consequently, ensuring the security of your signer is of utmost importance.
+
+Traditional private keys can be used to authenticate Smart Accounts, and they are the ones with the most tools available. 
+
+![AccountDecentralization.svg](https://blog-cms.openfort.xyz/uploads/Account_Decentralization_39a5c97ad7.svg)
+
+<Note>
+  <strong>Auth Costs </strong>
+  <br /> Each provider has different business models that might affect the long term costs of your implemnetation. Some consider number of active unique wallets, while other might consider the number of API calls you request.
+  Under request Openfort can support key management direclty, simplifying the burden and compliance of your internal teams via direct API. Connect with us if you're interested!
+</Note>
+
+### Integrate with a "Wallet-as-a-service" provider
+
+<Note>
+  <strong>Coming soon </strong>
+</Note>
+
+ <div
+className='relative'
+style={{position:"relative"}}
+>
+
+  <table>
+    <thead>
+      <tr>
+        <th className='px-4 uppercase text-xs font-semibold text-gray-500' style={{ width: '16%' }}>Tool </th>
+        <th className='uppercase text-xs font-semibold text-gray-500' style={{ width: '30%' }}>Key Management Method </th>
+        <th className='uppercase text-xs font-semibold text-gray-500' style={{ width: '30%' }}>Authentication Methods</th>
+        <th className='uppercase text-xs font-semibold text-gray-500' style={{ width: '351px' }}>Plug-n-play front end</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className='bg-gray-50 dark:bg-white/2.5 w-full'>
+        <td className='px-4 h-full'>Ether.js</td>
+        <td className='px-4 h-full'>Private Key</td>
+        <td className='px-4 h-full'>None</td>
+        <td className='px-4 h-full'>No</td>
+      </tr>
+      <tr className='bg-gray-50 dark:bg-white/2.5 w-full'>
+        <td className='px-4 h-full'>Web3Auth</td>
+        <td className='px-4 h-full'>MPC</td>
+        <td className='px-4 h-full'>Social, Device, Password</td>
+        <td className='px-4 h-full'>Yes</td>
+      </tr>
+      <tr className='bg-gray-50 dark:bg-white/2.5 w-full'>
+        <td className='px-4 h-full'>Magic Link</td>
+        <td className='px-4 h-full'>AWS KMS</td>
+        <td className='px-4 h-full'>Social, Email, Phone</td>
+        <td className='px-4 h-full'>Yes</td>
+      </tr>
+      <tr className='bg-gray-50 dark:bg-white/2.5 w-full'>
+        <td className='px-4 h-full'>Privy</td>
+        <td className='px-4 h-full'>MPC, TSS</td>
+        <td className='px-4 h-full'>Social, Email, Password</td>
+        <td className='px-4 h-full'>Yes</td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>
+
+### Integrate with a Key Management Service (KMS)
+
+<Note>
+  <strong>Coming soon </strong>
+</Note>
+
+
+<div
+className='relative'
+style={{position:"relative"}}
+>
+
+  <table>
+     <thead>
+      <tr>
+        <th className='px-4 uppercase text-xs font-semibold text-gray-500' style={{ width: '16%' }}>Tool </th>
+        <th className='uppercase text-xs font-semibold text-gray-500' style={{ width: '30%' }}>Key Management Method </th>
+        <th className='uppercase text-xs font-semibold text-gray-500' style={{ width: '30%' }}>Authentication Methods</th>
+        <th className='uppercase text-xs font-semibold text-gray-500' style={{ width: '351px' }}>Plug-n-play front end</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className='bg-gray-50 dark:bg-white/2.5 w-full'>
+        <td className='px-4 h-full'>Turnkey</td>
+        <td className='px-4 h-full'>Custodial</td>
+        <td className='px-4 h-full'>Custom</td>
+        <td className='px-4 h-full'>No</td>
+      </tr>
+      <tr className='bg-gray-50 dark:bg-white/2.5 w-full'>
+        <td className='px-4 h-full'>Fireblocks</td>
+        <td className='px-4 h-full'>Custodial</td>
+        <td className='px-4 h-full'>Custom</td>
+        <td className='px-4 h-full'>No</td>
+      </tr>
+      <tr className='bg-gray-50 dark:bg-white/2.5 w-full'>
+        <td className='px-4 h-full'>Amazon KMS</td>
+        <td className='px-4 h-full'>Custodial</td>
+        <td className='px-4 h-full'>Custom</td>
+        <td className='px-4 h-full'>No</td>
+      </tr>
+    </tbody> 
+
+  </table>
+</div>
+
+If you're looking to use a Key Managemnt Provider bear in mind you'll also need to integrate with an authentication provider (ie. Firebase, Supabase, etc.)
 
 ## Account flexibility
 
-Openfort allows users to move from "care-less" to "care-full" scenarios. Starting from a smart account with only one signature.
+Openfort Accounts necessitate the specification of one or more transaction authorizers during their creation. This requirement enables Openfort Accounts to verify that the intended owner is executing a transaction.
+
+Select one or multiple owners for an Openfort Account:
+
+- Single-factor authentication is the most straightforward method for authorizing Openfort Account transactions. With single-factor authentication, there is only one owner of an Openfort Account, an EOA, which can be either a Private Key or a Browser Wallet such as Metamask, Rainbow, or Coinbase Wallet.
+- Multi-factor authentication offers the most robust way to authorize Openfort Account transactions. With multi-factor authentication, there can be numerous owners of an Openfort Account, chosen from a mix of EOAs and social accounts like Twitter, Google, and Discord, among others.
+
 ![UserFlowOnboarding.svg](https://blog-cms.openfort.xyz/uploads/User_Flow_Onboarding_5eb02a5945.svg)
 
-Your players will be able to later on secure their smart contract wallets and regain ownership as they see fit.
-![AccountDecentralization.svg](https://blog-cms.openfort.xyz/uploads/Account_Decentralization_39a5c97ad7.svg)
