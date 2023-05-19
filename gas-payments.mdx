@@ -1,12 +1,13 @@
 export const description =
-  'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
+  'In this guide, we will talk about how to use Openfort's gas policies. How players can send transactions on-chain paying fees with ERC20 tokens or even for free.'
 
 # Gas policies
 
-Gas policies enable you to define the contracts and functions that your users can interact with without incurring gas costs. By specifying these policies, you can control the way your players interact with the in-game items and currencies. 
+Gas policies enable you to define the contracts and functions that your users can interact with without incurring gas costs in native tokens. By specifying these policies, you can control the way your players interact with the in-game items and currencies.
 
 ## Overview
-By default, users are responsible for paying their own gas fees. However, you have the option to sponsor specific transactions or even cover all gas fees on behalf of your users. This document will guide you through the process of setting up gas policies to ensure a secure and controlled sponsorship approach.
+
+By default, users are responsible for paying their own gas fees. However, with gas policies you can choose to sponsor transactions's gas fees or to let your users pay such fees in other tokens. This document will guide you through the process of setting up gas policies to ensure a secure and controlled sponsorship approach.
 
 This opens up a world of possibilities, including:
 
@@ -15,11 +16,9 @@ This opens up a world of possibilities, including:
 - Sponsors can allow users to pay for gas using a stablecoin like USDC or any other ERC20 token (ie. in-game token).
 - You could sponsor actions that imply an improvement on your game adoptions but leave it for users to pay actions that require leaving your gaming ecosystem.
 
-## How gas policies work
+## How Gas Policies Work
 
-You can use gas policies to specify the contracts and functions that you want your users to interact with without paying gas fees.
-
-![GasSponsorship.svg](https://blog-cms.openfort.xyz/uploads/Gas_Sponsorship_49fd2dd651.svg)
+You can use gas policies to specify the contracts and functions that you want your users to interact with without paying gas fees in native tokens.
 
 <Note>
 <strong>Add an asset contract</strong>
@@ -32,26 +31,28 @@ To set up your first gas sponsorship navigate first to the [Gas Policies tab](ht
 
 There are two types of sponsor strategies that you can implement:
 
-- Pay gas for users: Pay gas fees on behalf of your users using the network token (ie. ETH, MUMBAI, AVAC, etc.).
-- Charge gas in custom tokens: Either the game or the players pays gas fees with any ERC20 token (ie. USDC, in-game token, etc.)
+- Pay gas for user: pay gas fees on behalf of your users using the native token (ie. ETH, MUMBAI, AVAC, etc.).
+- Charge gas in custom tokens: the players can pay gas fees with any ERC20 token (ie. USDC, in-game token, etc.)
 
-![sponsorInfo](https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_11_at_19_39_03_min_f7f7f0c6c0.png)
+![sponsorInfo](https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_19_at_17_11_36_c037297405.png)
 
 ### Spending Rules
-When selecting `Allowed Transactions` you can decide what asset contract you want to sponsor transactions from.  
+When selecting `Allowed Transactions` you can decide what asset contract you want the sponsor strategy to be applied.
 
-Then, select either all or specifics functions you want your policy to sponsor.
+Select either all or specific functions you want your policy apply the sponsor strategy defined above.
 
 ![spendingRules](https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_11_at_19_40_27_min_39199b4304.png)
 
-After add `Rate Limits` under the Policy model option. You can set up on or many limits. 
-
-There are four types of rate limits:
-
+<Note>
+  <strong>Rate Limits</strong>
+  <br /> coming soon...
+  There are four types of rate limits:
 - Amount: limit by the amount of gas
 - Request: limit by the number of requests
 - Gas Price: limit by the curren gas price
 - Amount per txn: limit by the amount of gas per transaction
+</Note>
 
 ## Policy example
-1. Sponsor up to 1 AVAX every hour for minting an in-game asset. 
+1. Sponsor up to 1 AVAX for minting an in-game asset. 
+2. Let users pay in USDC for claiming in-game rewards.
