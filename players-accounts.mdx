@@ -1,7 +1,7 @@
 export const description =
   'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
 
-# Players and accounts
+# Players and Accounts
 
 Create and manage players and accounts with Openfort SDKs and APIs. 
 
@@ -38,7 +38,7 @@ key that manages it. As a result, it's possible to replace the key with another 
 
 ## Get started with players
 
-In this guide, we're going to cover patterns on how to create players for your game. To start make sure you've reveal your secreat API key.
+In this guide, we're going to cover patterns on how to create players for your game. To start make sure you've reveal your secret API key.
 
 <CodeGroup title="Create a player" tag="POST" label="/v1/players">
 
@@ -50,7 +50,7 @@ In this guide, we're going to cover patterns on how to create players for your g
     ```
 </CodeGroup>
 
-Note that a player can have several acccounts links. Therefore, we know need to create a player to interact with digital assets like minting or airdroping in-game asset.
+Note that a player can have several accounts links. Therefore, we know need to create a player to interact with digital assets like minting or airdropping in-game asset.
 
 ## Get started with accounts
 
@@ -75,7 +75,7 @@ To create an account, you'll need a `player id` and to define the chain where th
 
 Great! You created a player and associate an account to it. 
 
-Note: The address is conterfactual, meaning you can use the same address into other EVM chains (ZkEVM is an exception for now).
+Note: The address is counterfactual, meaning you can use the same address into other EVM chains (ZkEVM is an exception for now).
 
 ## Get a the player's account
 
@@ -83,7 +83,7 @@ Imagine that your players have associated more than one account in their player_
 - A EOA Account (ie. MetaMask)
 - A Smart Account (ie. Openfort social login)
 
-You can retrieve the acounts associated to a player by doing the following:
+You can retrieve the accounts associated to a player by doing the following:
 
 <CodeGroup title="List a player's account" tag="GET" label="/v1/players/:player/accounts">
 
@@ -92,6 +92,6 @@ You can retrieve the acounts associated to a player by doing the following:
        -u YOUR_SECRET_KEY:
     ```
 
-    </CodeGroup>
+</CodeGroup>
 
 
