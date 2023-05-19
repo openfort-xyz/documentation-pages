@@ -14,7 +14,7 @@ Openfort has developed a robust internal infrastructure for handling session key
 
 Session keys are cryptographic keys used to establish a secure connection between a player's device, the game server and the user's web3 account. They are generated inside the player's device and are used to authenticate requests from the player. Session keys are short-lived and typically expire after a certain period of inactivity or when the player logs out.
 
-![SessionKeys.excalidraw.svg](https://blog-cms.openfort.xyz/uploads/Session_Keys_excalidraw_3f37ce39f1.svg)
+![SessionKeys.excalidraw.svg](https://blog-cms.openfort.xyz/uploads/How_session_keys_work_1_772605d591.svg)
 
 ## How Session Keys Work
 When players log into the game, they can generate a session key for that device. The session key is then securely notified to the game server and is registered in the player's web3 account (aka smart contract wallet). Subsequent requests from the player's device to the game use the specific game's authentication mechanism of each game together with the user's session key. Openfort's infrastructure validates the session key and verifies the player's identity before processing the request.
