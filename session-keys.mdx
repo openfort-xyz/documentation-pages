@@ -2,32 +2,33 @@ export const description =
   'In this guide, we will talk about session keys. First a general overview and then we will show their role in Openfort.'
 
 # Session Keys
-In the realm of web3 games, session keys can be a crucial aspect for securing player accounts as well as improving the overall gaming experience. Session keys are used to authenticate players and authorize their actions within the game.
+In the realm of web3 games, session keys can be a crucial aspect for securing player accounts as well as improving the overall gaming experience. Session keys can be used to authenticate players, authorize their actions within the game, and grant limited permissions to their web3 accounts.
 
 ## Overview
-Openfort has developed a robust internal infrastructure for handling session keys, ensuring secure and seamless player authentication. This infrastructure includes automated systems for generating, managing, and validating session keys, all managed through Openfort APIs.
+Openfort has developed a robust internal infrastructure for handling session keys, ensuring secure and seamless player authentication. This infrastructure includes automated systems for generating, handling, and validating session keys, all managed through Openfort's API.
 
 <Note>
   <strong>Session Keys </strong>
   <br /> Coming Soon
 </Note>
 
-Session keys are cryptographic keys used to establish a secure connection between a player's device, the game server and the user's web3 account. They are generated during the player's login process and are used to authenticate subsequent requests from the player's device. Session keys are short-lived and typically expire after a certain period of inactivity or when the player logs out.
+Session keys are cryptographic keys used to establish a secure connection between a player's device, the game server and the user's web3 account. They are generated inside the player's device and are used to authenticate requests from the player. Session keys are short-lived and typically expire after a certain period of inactivity or when the player logs out.
 
 ![SessionKeys.excalidraw.svg](https://blog-cms.openfort.xyz/uploads/Session_Keys_excalidraw_3f37ce39f1.svg)
 
 ## How Session Keys Work
-When players log into the game, they can generate a session key for that device. The session key is then securely notified to the game server and the player's web3 account. Subsequent requests from the player's device to the game server are authenticated using the session key. Openfort's infrastructure validates the session key and verifies the player's identity before processing the request. Incorporating session tokens into games user interfaces offers several advantages:
-1. Enhanced Security: Utilizing session tokens minimizes exposure of a user's private key during transactions, lowering the risk of key theft.
-2. Reduced Transaction Signing: Users only need to sign one transaction when establishing a session, as opposed to multiple transactions for every individual action.
-3. Improved user experience: With fewer transactions to sign, users can enjoy a smoother and quicker experience when interacting with a dApp.
+When players log into the game, they can generate a session key for that device. The session key is then securely notified to the game server and is registered in the player's web3 account (aka smart contract wallet). Subsequent requests from the player's device to the game use the specific game's authentication mechanism of each game together with the user's session key. Openfort's infrastructure validates the session key and verifies the player's identity before processing the request.
+
+Incorporating session keys into web3 games offers several advantages:
+**1. Enhanced security:** fundamentally two big security improvements: they eliminate the need to store (and protect) the private keys of the account on the device and add permission granularity to web3 accouns to bring limited authorization. Such security enhancements mitigate the risks of key or asset theft.
+**2. Reduced transaction signing:** If players are authenitcated using their wallet (such as Metamask) when generating their session keys, they only need to sign one transaction to register that key. From now on, they will start using it for each interaction as opposed to signing each time for every action.
+**3. Improved user experience:** With fewer transactions to sign, users can enjoy a smoother and quicker experience when interacting with a dApp.
 
 ## Creating and Managing Session Keys
 To create and manage session keys in your game, follow these steps:
-
 - When players log in, they should generate a session key on their device and send it to your game server.
-- The sensitive parts of the session key are always securely stored on the player's device and should never be disclosed.
-- Include the public part of the session key in subsequent requests from the player's device to the game server for authentication. Such requests should be digitally signed by the secret part of the session key.
+- The sensitive part of the session key (session private key) is always securely stored on the player's device and should never be disclosed.
+- The player should include the public part of the session key in subsequent requests from the player's device to the game server for authentication. Such requests should be digitally signed by the secret part of the session key.
 - On the game server, validate the session key and the signature before processing the request.
 - Periodically refresh the session key during the player's session to maintain security.
 - Players can invalidate the session key whenever they want, e.g.: after logging out or after a certain period of inactivity.
