@@ -7,13 +7,13 @@ Gas policies enable you to define the contracts and functions that your users ca
 
 ## Overview
 
-By default, users are responsible for paying their own gas fees. However, with gas policies you can choose to sponsor transactions's gas fees or to let your users pay such fees in other tokens. This document will guide you through the process of setting up gas policies to ensure a secure and controlled sponsorship approach.
+By default, users are responsible for paying their own gas fees. However, with gas policies you can choose to sponsor transactions's gas fees or to let your users pay such fees in other tokens. This document will guide you through the process of setting up gas policies to ensure a secure and controlled approach.
 
 This opens up a world of possibilities, including:
 
 - New users can perform on-chain actions without having to acquire the native network token first.
 - Games can cover gas fees for their users to encourage adoption.
-- Sponsors can allow users to pay for gas using a stablecoin like USDC or any other ERC20 token (ie. in-game token).
+- Policies can allow users to pay for gas using a stablecoin like USDC or any other ERC20 token (ie. in-game token).
 - You could sponsor actions that imply an improvement on your game adoptions but leave it for users to pay actions that require leaving your gaming ecosystem.
 
 ## How Gas Policies Work
@@ -23,35 +23,33 @@ You can use gas policies to specify the contracts and functions that you want yo
 <Note>
   <strong>Add an asset contract</strong>
   <br />
-  To use contract policies, you first need to add your Asset Contract. This will
-  automatically create a Gas Policy with default parameters that you can later
-  modify.
+  To use contract policies, you first need to add your Asset Contract.
 </Note>
 
-To set up your first gas sponsorship navigate first to the [Gas Policies tab](https://dashboard.openfort.xyz/policies). Then click on the top right button `Add sponsor` to start filling the Sponsor Information.
+To set up your first gas policy navigate first to the [Gas Policies tab](https://dashboard.openfort.xyz/policies). Then click on the top right button `Add Policy` to start filling the Policy Information.
 
-### Sponsor Strategy
+### Types of Policies
 
-There are two types of sponsor strategies that you can implement:
+There are two types of gas policies that you can implement:
 
 - Pay gas for user: pay gas fees on behalf of your users using the native token (ie. ETH, MUMBAI, AVAC, etc.).
 - Charge gas in custom tokens: the players can pay gas fees with any ERC20 token (ie. USDC, in-game token, etc.)
 
 <div align="center">
-  <img alt="sponsorInfo" src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_19_at_17_11_36_c037297405.png" width="50%" height="50%"/>
+  <img alt="PolicyInfo" src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_19_at_17_11_36_c037297405.png" width="50%" height="50%"/>
 </div>
 
 ### Spending Rules
 
-When selecting `Allowed Transactions` you can decide what asset contract you want the sponsor strategy to be applied.
+When selecting `Allowed Transactions` you can decide what asset contract you want the gas strategy to be applied.
 
-Select either all or specific functions you want your policy apply the sponsor strategy defined above.
+Select either all or some specific functions you want your policy defined above to apply.
 
 ![spendingRules](https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_11_at_19_40_27_min_39199b4304.png)
 
 <Note>
   <strong>Rate Limits</strong>
-  <br /> coming soon...
+  <br /> Coming soon...
   <br /> There are four types of rate limits:
   <br /> - Amount: limit by the amount of gas
   <br /> - Request: limit by the number of requests
@@ -59,7 +57,7 @@ Select either all or specific functions you want your policy apply the sponsor s
   <br /> - Amount per txn: limit by the amount of gas per transaction
 </Note>
 
-## Policy example
+## Policy Example
 
 1. Sponsor up to 1 AVAX for minting an in-game asset.
 2. Let users pay in USDC for claiming in-game rewards.
