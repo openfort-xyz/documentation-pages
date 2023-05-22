@@ -1,97 +1,94 @@
 export const description =
-  'In this guide, we will talk about how to get get Signer from the SCWProvider, created & started using it normally as you would use an EOA.'
+  "In this guide, we will talk about how to create and manage players and their respective accounts on Openfort."
 
 # Players and Accounts
 
-Create and manage players and accounts with Openfort SDKs and APIs. 
+Create and manage players and their respective accounts using Openfort SDKs and APIs.
 
 ## Overview
 
-This guide explains how to interact and manage with players and accounts in your game ecosystem. 
-When using Openfort, you must create a user (known as `player`) for each user that wants to connect on your platform.
-Each player can have multiple accounts and each account is a different type of account based on the origin and type (ie. EOA -Metamask, EOA -mobile, etc.)
+This guide explains how to use Openfort to interact and manage your players and their accounts inside your game ecosystem.
+When using Openfort, you must create a user (known as `player`) for each individual that wants to use your game.
+Each player can have multiple accounts and each account can be of a different type (ie. EOA using Metamask, EOA using mobile, etc.)
 
 ![TransactionIntent.excalidraw.svg](https://blog-cms.openfort.xyz/uploads/Transaction_Intent_excalidraw_7c16a7e3d7.svg)
 
-## How players work
+## How Players Work
 
-You create players every time a user signs up for your platform. Players are used to identify users and enable them to interact with your game. Each player can have multiple accounts associated with it. You might create some accounts yourself, or you might enable access to account creation directly to your players in the Auth Page or player's settings.
-With the player endpoint you can create, update and retrieve payer details as well as seeing accounts under the `player's ID` and inventory.
+You create players every time a user signs up in your platform.
+Players are used to identify users and enable them to interact with your game.
+Each player can have multiple accounts associated with it.
+You might create some accounts yourself, or you might enable access to account creation directly to your players in the Auth Page or player's settings.
+With the Openfort's player endpoint you can create, update and retrieve payer details as well as seeing accounts under the `player's ID` and inventory.
 
-## How accounts work
+## How Accounts Work
 
-Accounts are used to manage the assets of a player. You can create multiple accounts associated with a player. Each account created through Openfort is automatically assigned a managed wallet that has the ability to gaslessly interact with your game's currencies and smart contracts for the blockchains you use.
+Accounts are used to manage the assets of a player. You can create multiple accounts associated with a player.
+Each account created through Openfort is automatically assigned a managed wallet that has the ability to gaslessly interact with your game's currencies and smart contracts for the blockchains you use.
 With the account endpoint you can list, create and retrieve the account.
 
 Using additional accounts has a number of benefits:
-- Allow players to onboard using different wallets
-- Being able to use assets from different accounts 
+- Allow players to onboard using different wallets.
+- The ability to use assets from different accounts.
 
-### Account types
+### Account Types
 
-Openfort offers a complete flexible account framework that allows game to decide the way they want to sign up players
+Openfort offers a complete flexible account framework that allows games to decide the way they want to sign up players
 (from custodial to completely self-custodial accounts) and the operational responsibilities it means
-(such as KMS, KYC/AML, etc). The beauty of Openfort accounts is the progressive "non-custodialization" of accounts. 
+(such as KMS, KYC/AML, etc). The beauty of Openfort accounts is the progressive "non-custodialization" of accounts.
 
 This is entirely possible because Openfort offers smart contract accounts, meaning the address is completely independent of the 
-key that manages it. As a result, it's possible to replace the key with another key, without changing the blockchain address of the account at all.
+key that manages it. As a result, it is possible to replace the key with another key, without changing the blockchain address of the account at all.
 
-## Get started with players
+## Get Started with Players
 
-In this guide, we're going to cover patterns on how to create players for your game. To start make sure you've reveal your secret API key.
+In this guide, we are going to cover patterns on how to create players for your game. To start, make sure you have reveal your secret API key.
 
 <CodeGroup title="Create a player" tag="POST" label="/v1/players">
-
-    ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/players \
-      -u YOUR_SECRET_KEY: \
-      -d name="FrankMcCallister" \
-      -d description="My First Test Player (created for API docs at https://www.openfort.xyz/docs/api)"
-    ```
+  ```bash {{ title: 'cURL' }}
+  curl https://api.openfort.xyz/v1/players \
+    -u YOUR_SECRET_KEY: \
+    -d name="FrankMcCallister" \
+    -d description="My First Test Player (created for API docs at https://www.openfort.xyz/docs/api)"
+  ```
 </CodeGroup>
 
-Note that a player can have several accounts links. Therefore, we know need to create a player to interact with digital assets like minting or airdropping in-game asset.
+Remember that a player can have several accounts. Therefore, we now need to create an account to interact with digital assets like minting or airdropping an in-game asset.
 
-## Get started with accounts
+## Get Started with Accounts
 
 <Note>
   <strong>Creating an account for your player</strong>
   <br /> 
-  You can create as many accounts as you want, but the first account will be the "default" account used to execute transactions. 
+  You can create as many accounts as you want for each player. However, the first account will be the "default" account used to execute transactions. 
 </Note>
 
-To create an account, you'll need a `player id` and to define the chain where the account will be deployed. 
+To create an account, you will need a `player id` and to define the chain where the account will be deployed. 
 
 <CodeGroup title="Create an account under the player's ID" tag="POST" label="/v1/accounts">
+  ```bash {{ title: 'cURL' }}
+  curl https://api.openfort.xyz/v1/accounts \
+    -u YOUR_SECRET_KEY: \
+    -d player="pla_42510499-0739-5813-bcf6-850bb91e935b" \
+    -d chain_id=5
+  ```
+</CodeGroup>
 
-    ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/accounts \
-      -u YOUR_SECRET_KEY: \
-      -d player="pla_42510499-0739-5813-bcf6-850bb91e935b" \
-      -d chain_id=5
-    ```
+Great! You created a player and associated an account to it. 
 
-    </CodeGroup>
+Note: Openfort's addresses are counterfactual, meaning you can use the same address into other EVM chains (ZkEVM is an exception for now).
 
-Great! You created a player and associate an account to it. 
+## Get Accounts of a Player
 
-Note: The address is counterfactual, meaning you can use the same address into other EVM chains (ZkEVM is an exception for now).
-
-## Get a the player's account
-
-Imagine that your players have associated more than one account in their player_id, for example:
-- A EOA Account (ie. MetaMask)
-- A Smart Account (ie. Openfort social login)
+Imagine that your player has associated more than one account with their `player_id`, for example:
+- An EOA account (ie. MetaMask)
+- A smart account (ie. Openfort social login)
 
 You can retrieve the accounts associated to a player by doing the following:
 
-<CodeGroup title="List a player's account" tag="GET" label="/v1/players/:player/accounts">
-
-    ```bash {{ title: 'cURL' }}
-        curl -G https://api.openfort.xyz/v1/players/pla_42510499-0739-5811-bcf6-850bb91e935b/accounts \
-       -u YOUR_SECRET_KEY:
-    ```
-
+<CodeGroup title="List player's accounts" tag="GET" label="/v1/players/:player/accounts">
+  ```bash {{ title: 'cURL' }}
+    curl -G https://api.openfort.xyz/v1/players/pla_42510499-0739-5811-bcf6-850bb91e935b/accounts \
+    -u YOUR_SECRET_KEY:
+  ```
 </CodeGroup>
-
-
