@@ -1,5 +1,5 @@
 export const description =
-  'In this guide, we will talk about how to use Openfort's gas policies. How players can send transactions on-chain paying fees with ERC20 tokens or even for free.'
+  "In this guide, we will talk about how to use Openfort's gas policies. How players can send transactions on-chain paying fees with ERC20 tokens or even for free."
 
 # Gas policies
 
@@ -21,8 +21,11 @@ This opens up a world of possibilities, including:
 You can use gas policies to specify the contracts and functions that you want your users to interact with without paying gas fees in native tokens.
 
 <Note>
-<strong>Add an asset contract</strong>
-  <br />To use contract policies, you first need to add your Asset Contract. This will automatically create a Gas Policy with default parameters that you can later modify.
+  <strong>Add an asset contract</strong>
+  <br />
+  To use contract policies, you first need to add your Asset Contract. This will
+  automatically create a Gas Policy with default parameters that you can later
+  modify.
 </Note>
 
 To set up your first gas sponsorship navigate first to the [Gas Policies tab](https://dashboard.openfort.xyz/policies). Then click on the top right button `Add sponsor` to start filling the Sponsor Information.
@@ -37,6 +40,7 @@ There are two types of sponsor strategies that you can implement:
 ![sponsorInfo](https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_19_at_17_11_36_c037297405.png)
 
 ### Spending Rules
+
 When selecting `Allowed Transactions` you can decide what asset contract you want the sponsor strategy to be applied.
 
 Select either all or specific functions you want your policy apply the sponsor strategy defined above.
@@ -54,5 +58,6 @@ Select either all or specific functions you want your policy apply the sponsor s
 </Note>
 
 ## Policy example
-1. Sponsor up to 1 AVAX for minting an in-game asset. 
+
+1. Sponsor up to 1 AVAX for minting an in-game asset.
 2. Let users pay in USDC for claiming in-game rewards.
