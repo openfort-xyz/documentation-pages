@@ -24,7 +24,7 @@ curl --version
 
 ```js {{ language: 'js', title: 'JavaScript' }}
 // Install the Openfort JavaScript SDK
-npm install @openfort-sdk/scw --save
+npm install @openfort-xyz/openfort-node --save
 ```
 
 </CodeGroup>
@@ -35,6 +35,36 @@ npm install @openfort-sdk/scw --save
     variant="text"
     arrow="right"
     children="Check out our list of first-party SDKs"
+  />
+</div>
+
+## Making your first API request
+
+After picking your preferred client, you are ready to make your first call to the Openfort API. Below, you can see how to send a GET request to the Players endpoint to get a list of all your players. In the cURL example, results are limited to ten conversations.
+
+<CodeGroup tag="GET" label="/v1/players">
+
+```bash {{ title: 'cURL' }}
+curl -G https://api.openfort.xyz/v1/players \
+  -H "Authorization: Bearer {YOUR_SECRET_KEY}" \
+  -d limit=10
+```
+
+```js
+import { Openfort } from '@openfort-xyz/openfort-node'
+
+const openfort = new Openfort(YOUR_SECRET_KEY)
+
+await openfort.players.getPlayers()
+```
+
+</CodeGroup>
+<div className="not-prose">
+  <Button
+    href="/api/players"
+    variant="text"
+    arrow="right"
+    children="Read the docs for the Players endpoint"
   />
 </div>
 
