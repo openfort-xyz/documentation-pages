@@ -22,8 +22,8 @@ Before making your first API request, you need to pick which API client you will
 curl --version
 ```
 
-```js {{ language: 'js', title: 'JavaScript' }}
-// Install the Openfort JavaScript SDK
+```js {{ language: 'js', title: 'Node.js' }}
+// Install the Openfort Node SDK
 npm install @openfort-xyz/openfort-node --save
 ```
 
@@ -50,7 +50,7 @@ curl -G https://api.openfort.xyz/v1/players \
   -d limit=10
 ```
 
-```js
+```js {{ title: 'Node.js' }}
 import { Openfort } from '@openfort-xyz/openfort-node'
 
 const openfort = new Openfort(YOUR_SECRET_KEY)
