@@ -38,7 +38,7 @@ To create and manage session keys in your game, follow these steps:
 
 ## Registering Session Keys
 
-A player can register new session keys through the following Openfort API endpoint.
+As indicated above, a player can register new session keys through the following Openfort API endpoint.
 The first example below shows the call to register a session key for a player using a custodial account.
 As they do not hold the private key of the administrator/owner wallet, no further actions are required from the player.
 
@@ -60,7 +60,7 @@ Notice the extra `external_owner_address` parameter needed.
 As they hold the private key of the administrator/owner wallet, the response of such call would contain an extra
 element called `next_action` which will need to be signed by the players EOA and returned in a successive API call.
 
-<CodeGroup title="Request (non-custodial accounts)" tag="POST" label="/v1/sessions">
+<CodeGroup title="Register a session key (non-custodial accounts)" tag="POST" label="/v1/sessions">
   ```bash {{ title: 'cURL' }}
     curl https://api.openfort.xyz/v1/sessions \
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
