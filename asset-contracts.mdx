@@ -7,7 +7,9 @@ In web3 gaming, assets refer to various in-game items, currencies, loot boxes, a
 
 ## Overview
 
-Asset management is important in a web3 game as it allows players to easily manage their in-game assets. These assets may have different on-chain actions associated with them, such as buying, selling, trading, or using them in-game. Additionally, asset management may involve interactions with external item contracts or marketplaces.
+Asset management is important in a web3 game as it allows players to easily control their in-game resources.
+These assets may have different on-chain actions associated with them, such as buying, selling, trading, or using them in-game.
+Additionally, asset management may involve interactions with external item contracts or marketplaces.
 
 In a web3 game, different types of assets and asset support are crucial, including:
 
@@ -39,14 +41,13 @@ You can obtain the ABI of a contract in several ways, such as through manual ent
 You can also "Add an asset" by using your terminal:
 
 <CodeGroup title="Create a contract of an asset" tag="POST" label="/v1/contracts">
-
-    ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/accounts \
-      -u YOUR_SECRET_KEY: \
-      -d player="pla_42510499-0739-5813-bcf6-850bb91e935b" \
-      -d chain_id=5
-    ```
-
+  ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/contracts \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d name="SimpleNFT" \
+    -d address=0x416c...354D \
+    -d chain_id=5
+  ```
 </CodeGroup>
 
 Check the guide on [Execute Transaction](/execute-transactions) if you're now looking to mint and transfer the asset into an account. 

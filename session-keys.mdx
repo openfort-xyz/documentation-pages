@@ -26,7 +26,7 @@ Incorporating session keys into web3 games offers several advantages:
 **3. Improved user experience:** With fewer transactions to sign, users can enjoy a smoother and quicker experience when interacting with a dApp.
 
 
-## Creating and Managing Session Keys
+## Session Keys' Lifecycle
 
 To create and manage session keys in your game, follow these steps:
 - When players log in, they should generate a session key on their device and send it to your game server.
@@ -35,3 +35,54 @@ To create and manage session keys in your game, follow these steps:
 - On the game server, validate the session key and the signature before processing the request.
 - Periodically refresh the session key during the player's session to maintain security.
 - Players can invalidate the session key whenever they want, e.g.: after logging out or after a certain period of inactivity.
+
+## Registering Session Keys
+
+A player can register new session keys through the following Openfort API endpoint.
+The first example below shows the call to register a session key for a player using a custodial account.
+As they do not hold the private key of the administrator/owner wallet, no further actions are required from the player.
+
+<CodeGroup title="Register a session key (custodial accounts)" tag="POST" label="/v1/sessions">
+  ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/sessions \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d player=pla_... \
+    -d address=0x76e6...9341 \
+    -d chain_id=80001 \
+    -d valid_until=1700000000 \
+    -d valid_after=1650000000 \
+    -d policy=pol_...
+  ```
+</CodeGroup>
+
+The second example, below, is an example of the API call that players with non-custodial accounts would use.
+Notice the extra `external_owner_address` parameter needed.
+As they hold the private key of the administrator/owner wallet, the response of such call would contain an extra
+element called `next_action` which will need to be signed by the players EOA and returned in a successive API call.
+
+<CodeGroup title="Request (non-custodial accounts)" tag="POST" label="/v1/sessions">
+  ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/sessions \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d player=pla_... \
+    -d address=0x76e6...9341 \
+    -d chain_id=80001 \
+    -d valid_until=1700000000 \
+    -d valid_after=1650000000 \
+    -d policy=pol_...
+    -d external_owner_address=0x8a16...CE4a
+  ```
+</CodeGroup>
+
+Once the content of the `next_action` parameter above is signed by the player's wallet,
+it has to be sent using the endpoint `/v1/sessions/:session/signature` as shown below:
+
+<CodeGroup title="Request" tag="POST" label="/v1/sessions/:session/signature">
+  ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/sessions/ses_.../signature \
+    -H "Authorization: Bearer $YOUR_PUBLISHABLE_KEY" \
+    -d "signature=xyz..."
+  ```
+</CodeGroup>
+
+For more information about how to use the sesion key endpoints, you can visit our [API documentation](https://www.openfort.xyz/docs/api/sessions).
