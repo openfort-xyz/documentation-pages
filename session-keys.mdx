@@ -55,8 +55,8 @@ As they do not hold the private key of the administrator/owner wallet, no furthe
   ```
 </CodeGroup>
 
-The second example, below, is an example of the API call that players with non-custodial accounts would use.
-Notice the extra `external_owner_address` parameter needed.
+The second example below, is an example of the API call that players with non-custodial accounts would use.
+Notice the extra `external_owner_address` parameter needed to indicate the actual (EOA)](https://ethereum.org/en/developers/docs/accounts/) that will sign the authorization of the action.
 As they hold the private key of the administrator/owner wallet, the response of such call would contain an extra
 element called `next_action` which will need to be signed by the players EOA and returned in a successive API call.
 
