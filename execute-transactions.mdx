@@ -59,13 +59,13 @@ This means that either all transactions within the batch will execute or none of
   ```bash {{ title: 'cURL' }}
     curl https://api.openfort.xyz/v1/transaction_intent \
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
-    -d player="pla_42510499-0739-5813-bcf6-850bb91e935b" \
+    -d player="pla_..." \
     -d chain_id=5 \
-    -d interactions[0].contract="con_368cd42e-d9da-4c88-8d98-350af52c4ea0" \
-    -d interactions[0].function_name="mint" \
-    -d interactions[0].function_args[0]="0x63B7dCD88658f0609adDac08Cfae6538f084484f" \
-    -d interactions[1].contract="con_368cd42e-d9da-4c88-8d98-350af52c4ea0" \
-    -d interactions[1].function_name="mint" \
-    -d interactions[1].function_args[0]="0x63B7dCD88658f0609adDac08Cfae6538f084484f"
+    -d interactions[0][contract]="con_..." \
+    -d interactions[0][function_name]="mint" \
+    -d interactions[0][function_args]="0x63B7...484f" \
+    -d interactions[1][contract]="con_..." \
+    -d interactions[1][function_name]="mint" \
+    -d interactions[1][function_args]="0x63B7...484f"
   ```
 </CodeGroup>
