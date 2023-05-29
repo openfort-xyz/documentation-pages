@@ -24,12 +24,12 @@ Openfort's infrastructure verifies the transaction request, updates the blockcha
 
 ## Simple Transaction
 
-To execute a simple transaction via the Openfort API, just send a transaction intent with the necessary details, such as the player, chain id, policy, contract to interact with and its required arguments.
-- If the player is using a custodial account, no further action is required from their side. The operation will be processed by Openfort and sent on-chain.
-- If the player is using a non-custodial account, given that they are the only ones in possession of the secret key, they must approve the transaction. For that, they will need to sign the information inside the `next_action` value received. Once signed, players need to send such signature using the `/v1/sessions/:session/signature` endpoint. If signed correctly, this will successfully authorize a transaction intent for the assigned account.
+To execute a simple transaction via the Openfort API, players just need to send a transaction intent with the necessary details, such as the player, chain id, policy, contract to interact with and its required arguments.
+- If the player is using a custodial account, no further action is required from their side. The operation will be processed by Openfort and it will be sent on-chain.
+- If the player is using a non-custodial account, given that they are the only ones in possession of the secret key, they must approve the transaction. For that, they will receive a `next_action` with the information that Openfort wants to send on-chain. The player will need to sign it locally send it and send it using the `/v1/sessions/:session/signature` endpoint. If signed correctly, this will successfully authorize a transaction intent for the assigned account.
 
-As an example, let's execute a minting of an asset via a simple transaction call.
-If the player is using a custodial account, no further action is required and we can expect the minting to take place immediately:
+As an example, let's execute a minting of an asset via a simple transaction API call.
+If the player is using a custodial account, no further action is required and we can expect the minting to take place immediately after sending the following call:
 
 <CodeGroup title="Create a transaction intent to mint" tag="POST" label="/v1/transaction_intents">
   ```bash {{ title: 'cURL' }}
@@ -45,10 +45,10 @@ If the player is using a custodial account, no further action is required and we
   ```
 </CodeGroup>
 
-However, if the API call was performed by a player using a non-custodial account, the response of the call above would contain a `next_action` parameter.
+However, if the API call was performed by a player using a non-custodial account, the response of the call above would contain a `next_action` parameteras explained above.
 That paramter indicates the information that the player needs to sign to approve the transaction intent.
 Once signed, the player needs to send such signature using the `/v1/sessions/:session/signature` endpoint.
-The player's request must be authenticated with the publishable Openfort key (see `$YOUR_PUBLISHABLE_KEY` in the related request).
+The player's request must be authenticated with the publishable Openfort key (see `$YOUR_PUBLISHABLE_KEY` in the request below).
 For more information about Secret vs Publishable Keys, you can visit out [API keys docs](https://www.openfort.xyz/docs/keys#api-keys).
 
 <CodeGroup title="Sign a transaction intent to mint" tag="POST" label="/v1/transaction_intents/:transaction_intent/signature">
