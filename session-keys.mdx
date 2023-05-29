@@ -19,7 +19,7 @@ When players sign up or log into the game, they can generate a session key for t
 
 Incorporating session keys into web3 games offers several advantages:
 
-**1. Enhanced security:** fundamentally two big security improvements: they eliminate the need to store (and protect) the private keys of the account on the device and add permission granularity to web3 accouns to bring limited authorization. Such security enhancements mitigate the risks of key or asset theft.
+**1. Enhanced security:** fundamentally two big security improvements: they eliminate the need to store (and protect) the private keys of the account on the device and add permission granularity to web3 accounts to bring limited authorization. Such security enhancements mitigate the risks of key or asset theft.
 
 **2. Reduced transaction signing:** If players are authenitcated using their wallet (such as Metamask) when generating their session keys, they only need to sign one transaction to register that key. From now on, they will start using it for each interaction as opposed to signing each time for every action.
 
@@ -56,7 +56,7 @@ As they do not hold the private key of the administrator/owner wallet, no furthe
 </CodeGroup>
 
 The second example below, is an example of the API call that players with non-custodial accounts would use.
-Notice the extra `external_owner_address` parameter needed to indicate the actual (EOA)](https://ethereum.org/en/developers/docs/accounts/) that will sign the authorization of the action.
+Notice the extra `external_owner_address` parameter needed to indicate the actual [EOA](https://ethereum.org/en/developers/docs/accounts/) that will sign the authorization of the action.
 As they hold the private key of the administrator/owner wallet, the response of such call would contain an extra
 element called `next_action` which will need to be signed by the players EOA and returned in a successive API call.
 

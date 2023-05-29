@@ -47,8 +47,8 @@ If the player is using a custodial account, no further action is required and we
   ```
 </CodeGroup>
 
-However, if the API call was performed by a player using a non-custodial account, the response of the call above would contain a `next_action` parameteras explained above.
-That paramter indicates the information that the player needs to sign to approve the transaction intent.
+However, if the API call was performed by a player using a non-custodial account, the response of the call above would contain a `next_action` parameter explained above.
+That parameter indicates the information that the player needs to sign to approve the transaction intent.
 Once signed, the player needs to send such signature using the `/v1/sessions/:session/signature` endpoint.
 The player's request must be authenticated with the publishable Openfort key (see `$YOUR_PUBLISHABLE_KEY` in the request below).
 For more information about Secret vs Publishable Keys, you can visit out [API keys docs](https://www.openfort.xyz/docs/keys#api-keys).
