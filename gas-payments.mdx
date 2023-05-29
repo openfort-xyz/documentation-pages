@@ -55,17 +55,6 @@ Select either all or some specific functions you want your policy defined above 
 
 When selecting `Register sessions` as the rule model, the affected policy will be applied for the registration of new session keys.
 
-You can also use the API to interact with the different spending rules.
-The endpoint below can be used to list the spending rules (allow functions) related to a policy:
-
-<CodeGroup title="List all allowed functions for a policy" tag="GET" label="/v1/allow_functions">
-  ```bash {{ title: 'cURL' }}
-    curl -G https://api.openfort.xyz/v1/allow_functions \
-    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
-    -d policy=pol_...
-  ```
-</CodeGroup>
-
 <Note>
   <strong>Rate Limits (coming soon...)</strong>
   <br /> There will be four types of rate limits:
@@ -77,7 +66,7 @@ The endpoint below can be used to list the spending rules (allow functions) rela
 
 ### Using the API
 
-You can also use the Openfort API to directly interact with gas policies.
+You can use the Openfort API to directly interact with gas policies.
 Here is an example to create a new policy to charge gas fees in custom tokens:
 
 <CodeGroup title="Create a policy for charging in custom tokens" tag="POST" label="/v1/policies">
@@ -89,6 +78,17 @@ Here is an example to create a new policy to charge gas fees in custom tokens:
     -d "strategy[sponsor_schema]=charge_custom_tokens" \
     -d "strategy[token_contract]=con_..." \
     -d "strategy[token_contract_amount]=10000"
+  ```
+</CodeGroup>
+
+You can also use the API to interact with the different spending rules.
+The endpoint below can be used to list the spending rules (allow functions) related to a policy:
+
+<CodeGroup title="List all allowed functions for a policy" tag="GET" label="/v1/allow_functions">
+  ```bash {{ title: 'cURL' }}
+    curl -G https://api.openfort.xyz/v1/allow_functions \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d policy=pol_...
   ```
 </CodeGroup>
 
