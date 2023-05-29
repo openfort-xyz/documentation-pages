@@ -40,7 +40,6 @@ If the player is using a custodial account, no further action is required and we
     -d player=pla_... \
     -d chain_id=80001 \
     -d optimistic=true \
-    -d policy=pol_... \
     -d "interactions[contract]=con_..." \
     -d "interactions[function_name]=mint" \
     -d "interactions[function_args][0]=0x63B7...484f"
@@ -62,6 +61,12 @@ For more information about Secret vs Publishable Keys, you can visit out [API ke
 </CodeGroup>
 
 If signed correctly, this will successfully authorize a transaction intent for the assigned account.
+
+<Note>
+  <strong>Notice: </strong>
+  <br /> In order to execute the transaction intents above, the player should have some native tokens to pay for gas transaction.
+  If you want to be able to sponsor transaction gas or allow players to pay them in ERC20, visit [Gas Payments](/gas-payments).
+</Note>
 
 ## Batched Transactions
 
