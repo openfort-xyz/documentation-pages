@@ -45,7 +45,7 @@ There are two types of gas policies that you can implement:
 
 ### Spending Rules
 
-When selecting `Allowed transactions` as the rule model, you can decide what asset contract you want the gas strategy to be applied.
+When selecting `Allowed transactions` as the rule model, you can decide what asset contract you want the gas strategy to be applied to.
 
 Select either all or some specific functions you want your policy defined above to apply.
 
@@ -53,9 +53,10 @@ Select either all or some specific functions you want your policy defined above 
   <img alt="spendingRules" src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_29_at_15_53_15_40188a75a5.png" width="50%" height="50%"/>
 </div>
 
-When selecting `Register sessions` as the rule model, the affected policy will allow the registration of new session keys. 
+When selecting `Register sessions` as the rule model, the affected policy will be applied for the registration of new session keys.
 
-You can also use the API to interact with the different spending rules:
+You can also use the API to interact with the different spending rules.
+The endpoint below can be used to list the spending rules (allow functions) related to a policy:
 
 <CodeGroup title="List all allowed functions for a policy" tag="GET" label="/v1/allow_functions">
   ```bash {{ title: 'cURL' }}
@@ -76,7 +77,8 @@ You can also use the API to interact with the different spending rules:
 
 ### Using the API
 
-You can also use the Openfort API to directly interact with gas policies. Here is an example:
+You can also use the Openfort API to directly interact with gas policies.
+Here is an example to create a new policy to charge gas fees in custom tokens:
 
 <CodeGroup title="Create a policy for charging in custom tokens" tag="POST" label="/v1/policies">
   ```bash {{ title: 'cURL' }}
