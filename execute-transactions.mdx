@@ -8,30 +8,32 @@ Transactions are updates to data on the blockchain and are used in games for var
 
 ## Overview
 
-Openfort transactions are executed from a smart contract wallet.
-Transactions, also called "transaction intents", are the best way to track the status and details of each one.
+Openfort transactions are executed from a smart contract wallet and they are referred as "transaction intents".
+They are the way to send, track the status, and view details of each on-chain action.
 
 Openfort has developed a robust internal infrastructure capable of handling over 10,000 transactions per second, per game.
 This infrastructure includes automated systems for both gasless and non-gasless transactions, which are seamlessly managed through Openfort APIs when players interact with the game.
 
 ## How Transactions Work
 
-Transactions are executed by sending an authenticated transaction request to the Openfort API.
+Transactions are executed by sending an authenticated transaction intent to the Openfort API.
 The transaction request contains the necessary information, such as the sender's address, recipient's address, and transaction data.
 Openfort's infrastructure verifies the transaction request, updates the blockchain data accordingly, and returns a transaction hash as proof of the transaction.
 
 ![transactionIntent](https://blog-cms.openfort.xyz/uploads/Backed_APISDK_excalidraw_3_57642c9d67.svg)
 
-## Simple transaction
+## Simple Transaction
 
 To execute a simple transaction via the Openfort API, follow these steps:
 
-- Create a transaction object with the necessary details, such as sender's address, recipient's address, and transaction data.
-- Sign the transaction object with the private key of the sender's account.
-- Send the signed transaction object to the Openfort API using the appropriate endpoint.
-- Openfort's infrastructure will verify the transaction, update the blockchain data, and return a transaction hash as proof of the transaction.
+- Send a transaction intent with the necessary details, such as the player, chain id, policy, contract to interact with and its required arguments.
+- If the player is using a custodial account, no further action is required from their side. The operation will be processed by Openfort and sent on-chain.
+- If the player is using a non-custodial account, given that they are the only ones in possession of the secret key, they must approve the transaction. For that, they will need to sign the information inside the `next_action` value received.
+- Once signed, players need to send such signature using the `/v1/sessions/:session/signature` endpoint.
+- If signed correctly, this will successfully authorize a transaction intent for the assigned account.
 
-As an example we can execute a minting of an asset via a simple transaction call:
+As an example, let's execute a minting of an asset via a simple transaction call.
+If the player is using a custodial account, no further action is required and we can expect the minting to take place immediately:
 
 <CodeGroup title="Create a transaction intent to mint" tag="POST" label="/v1/transaction_intents">
   ```bash {{ title: 'cURL' }}
@@ -46,6 +48,22 @@ As an example we can execute a minting of an asset via a simple transaction call
     -d "interactions[function_args][0]=0x63B7...484f"
   ```
 </CodeGroup>
+
+However, if the API call was performed by a player using a non-custodial account, the response of the call above would contain a `next_action` parameter.
+That paramter indicates the information that the player needs to sign to approve the transaction intent.
+Once signed, the player needs to send such signature using the `/v1/sessions/:session/signature` endpoint.
+The player's request must be authenticated with the publishable Openfort key (see `$YOUR_PUBLISHABLE_KEY` in the related request).
+For more information about Secret vs Publishable Keys, you can visit out [API keys docs](https://www.openfort.xyz/docs/keys#api-keys).
+
+<CodeGroup title="Sign a transaction intent to mint" tag="POST" label="/v1/transaction_intents/:transaction_intent/signature">
+  ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/transaction_intents/tin_.../signature \
+    -H "Authorization: Bearer $YOUR_PUBLISHABLE_KEY" \
+    -d "signature=0x9330...351c"
+  ```
+</CodeGroup>
+
+If signed correctly, this will successfully authorize a transaction intent for the assigned account.
 
 ## Batched Transactions
 
