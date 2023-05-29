@@ -24,13 +24,9 @@ Openfort's infrastructure verifies the transaction request, updates the blockcha
 
 ## Simple Transaction
 
-To execute a simple transaction via the Openfort API, follow these steps:
-
-- Send a transaction intent with the necessary details, such as the player, chain id, policy, contract to interact with and its required arguments.
+To execute a simple transaction via the Openfort API, just send a transaction intent with the necessary details, such as the player, chain id, policy, contract to interact with and its required arguments.
 - If the player is using a custodial account, no further action is required from their side. The operation will be processed by Openfort and sent on-chain.
-- If the player is using a non-custodial account, given that they are the only ones in possession of the secret key, they must approve the transaction. For that, they will need to sign the information inside the `next_action` value received.
-- Once signed, players need to send such signature using the `/v1/sessions/:session/signature` endpoint.
-- If signed correctly, this will successfully authorize a transaction intent for the assigned account.
+- If the player is using a non-custodial account, given that they are the only ones in possession of the secret key, they must approve the transaction. For that, they will need to sign the information inside the `next_action` value received. Once signed, players need to send such signature using the `/v1/sessions/:session/signature` endpoint. If signed correctly, this will successfully authorize a transaction intent for the assigned account.
 
 As an example, let's execute a minting of an asset via a simple transaction call.
 If the player is using a custodial account, no further action is required and we can expect the minting to take place immediately:
