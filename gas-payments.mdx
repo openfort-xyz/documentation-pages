@@ -32,7 +32,7 @@ You can use gas policies to specify the contracts and functions that you want yo
 To set up your first gas policy navigate first to the [Gas Policies tab](https://dashboard.openfort.xyz/policies).
 Then click on the top right button `Add Policy` to start filling the Policy Information.
 
-### Types of Policies
+### Sponsorship strategies
 
 There are two types of gas policies that you can implement:
 
@@ -43,41 +43,54 @@ There are two types of gas policies that you can implement:
   <img alt="PolicyInfo" src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_29_at_14_16_09_48a07b3db1.png" width="50%" height="50%"/>
 </div>
 
-### Using the API
-
-You can also use the Openfort API to directly interact with gas policies. Here is an example:
-
-<CodeGroup title="Create a policy for gas sponsoring" tag="POST" label="/v1/policies">
-  ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/policies/ \
-      -H "Authorization: Bearer $YOUR_SECRET_KEY" \
-      -d chain_id=5 \
-      -d name="TEST" \
-      -d "strategy[sponsor_schema]=pay_for_user" \
-      -d "strategy[token_contract]=" \
-      -d "strategy[token_contract_amount]="
-  ```
-</CodeGroup>
-
-For more details, you can visit the [Policies documentation](https://www.openfort.xyz/docs/api/policies) of the API.
-
 ### Spending Rules
 
-When selecting `Allowed Transactions` you can decide what asset contract you want the gas strategy to be applied.
+When selecting `Allowed transactions` as the rule model, you can decide what asset contract you want the gas strategy to be applied.
 
 Select either all or some specific functions you want your policy defined above to apply.
 
-![spendingRules](https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_11_at_19_40_27_min_39199b4304.png)
+<div align="center">
+  <img alt="spendingRules" src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_29_at_15_53_15_40188a75a5.png" width="50%" height="50%"/>
+</div>
+
+When selecting `Register sessions` as the rule model, the affected policy will allow the registration of new session keys. 
+
+You can also use the API to interact with the different spending rules:
+
+<CodeGroup title="List all allowed functions for a policy" tag="GET" label="/v1/allow_functions">
+  ```bash {{ title: 'cURL' }}
+    curl -G https://api.openfort.xyz/v1/allow_functions \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d policy=pol_...
+  ```
+</CodeGroup>
 
 <Note>
-  <strong>Rate Limits</strong>
-  <br /> Coming soon...
-  <br /> There are four types of rate limits:
+  <strong>Rate Limits (coming soon...)</strong>
+  <br /> There will be four types of rate limits:
   <br /> - Amount: limit by the amount of gas
   <br /> - Request: limit by the number of requests
   <br /> - Gas Price: limit by the current gas price
   <br /> - Amount per txn: limit by the amount of gas per transaction
 </Note>
+
+### Using the API
+
+You can also use the Openfort API to directly interact with gas policies. Here is an example:
+
+<CodeGroup title="Create a policy for charging in custom tokens" tag="POST" label="/v1/policies">
+  ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/policies/ \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d chain_id=5 \
+    -d name="TEST" \
+    -d "strategy[sponsor_schema]=charge_custom_tokens" \
+    -d "strategy[token_contract]=con_..." \
+    -d "strategy[token_contract_amount]=10000"
+  ```
+</CodeGroup>
+
+For more details, you can visit the [Policies documentation](https://www.openfort.xyz/docs/api/policies) of the API.
 
 ## Gas Policy Examples
 
