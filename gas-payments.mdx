@@ -40,8 +40,26 @@ There are two types of gas policies that you can implement:
 - Charge gas in custom tokens: the players can pay gas fees with any ERC20 token (ie. USDC, in-game token, etc.)
 
 <div align="center">
-  <img alt="PolicyInfo" src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_19_at_17_11_36_c037297405.png" width="50%" height="50%"/>
+  <img alt="PolicyInfo" src="https://strapi-oube.onrender.com/uploads/Screenshot_2023_05_29_at_14_16_09_48a07b3db1.png" width="50%" height="50%"/>
 </div>
+
+### Using the API
+
+You can use the Openfort API to interact with gas policies. Here is an example:
+
+<CodeGroup title="Create a policy for gas sponsoring" tag="POST" label="/v1/policies">
+  ```bash {{ title: 'cURL' }}
+    curl https://api.openfort.xyz/v1/policies/ \
+      -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+      -d chain_id=5 \
+      -d name="TEST" \
+      -d "strategy[sponsor_schema]=pay_for_user" \
+      -d "strategy[token_contract]=" \
+      -d "strategy[token_contract_amount]="
+  ```
+</CodeGroup>
+
+For more details, you can visit the [Policies documentation](https://www.openfort.xyz/docs/api/policies) of the API.
 
 ### Spending Rules
 
@@ -61,7 +79,7 @@ Select either all or some specific functions you want your policy defined above 
   <br /> - Amount per txn: limit by the amount of gas per transaction
 </Note>
 
-## Policy Examples
+## Gas Policy Examples
 
 1. Sponsor up to 1 AVAX for minting an in-game asset.
 2. Let users pay in USDC for claiming in-game rewards.
