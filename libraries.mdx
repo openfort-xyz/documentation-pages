@@ -1,14 +1,24 @@
-import { Libraries } from '@/components/Libraries'
+import { ServerLibraries } from '@/components/ServerLibraries'
+import { ClientLibraries } from '@/components/ClientLibraries'
 
 export const description =
-  'Openfort offers fine-tuned JavaScript, Unreal, and Unity libraries to make your life easier and give you the best experience when consuming the API.'
+  'Libraries and tools for interacting with your Openfort integration.'
 
 export const sections = [
-  { title: 'Official libraries', id: 'official-libraries' },
+  { title: 'Server-side SDKs', id: 'server-side-sdks' },
+  { title: 'Client-side SDKs', id: 'client-side-sdks' },
 ]
 
 # Openfort SDKs
 
-The recommended way to interact with the Openfort API is by using one of our official SDKs. Today, Openfort offers fine-tuned JavaScript, Unity, Unreal and React libraries to make your life easier and give you the best experience when consuming the API. {{ className: 'lead' }}
+The recommended way to interact with the Openfort API is by using one of our official SDKs.{{ className: 'lead' }}
 
-<Libraries />
+<ServerLibraries />
+
+<ClientLibraries />
+
+## Openfort OpenAPI Specification
+
+Openfort’s OpenAPI specification empowers you with a broad set of developer tooling, starting with Postman collections.
+
+[Openfort Open API Specification](https://api.openfort.xyz//api-docs/swagger.json)
