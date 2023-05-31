@@ -21,6 +21,7 @@ To better understand how session keys work on Openfort, you can read our blog po
 A player can register new session keys through the following Openfort API endpoint.
 The first example below shows the call to register a session key for a player using a custodial account.
 As they do not hold the private key of the administrator/owner wallet, no further actions are required from the player.
+The created session key would be valid since the 25th of May 2023 at 7:50 GMT (1685001000) and last for 1 hour (1685004600).
 
 <CodeGroup title="Register a session key (custodial accounts)" tag="POST" label="/v1/sessions">
   ```bash {{ title: 'cURL' }}
@@ -29,8 +30,8 @@ As they do not hold the private key of the administrator/owner wallet, no furthe
     -d player=pla_... \
     -d address=0x76e6...9341 \
     -d chain_id=80001 \
-    -d valid_until=1700000000 \
-    -d valid_after=1650000000 \
+    -d valid_until=1685004600 \
+    -d valid_after=1685001000 \
     -d policy=pol_...
   ```
 </CodeGroup>
@@ -47,8 +48,8 @@ element called `next_action` which will need to be signed by the players EOA and
     -d player=pla_... \
     -d address=0x76e6...9341 \
     -d chain_id=80001 \
-    -d valid_until=1700000000 \
-    -d valid_after=1650000000 \
+    -d valid_until=1685004600 \
+    -d valid_after=1685001000 \
     -d policy=pol_...
     -d external_owner_address=0x8a16...CE4a
   ```

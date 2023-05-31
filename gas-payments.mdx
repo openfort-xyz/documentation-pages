@@ -99,9 +99,11 @@ For more details, you can visit the [Policies documentation](https://www.openfor
 
 The following screenshots show example policies that game developers can configure.
 
-### Sponsor for minting an in-game asset
+### Sponsor minting an in-game asset
 
-To let players mint new shields on a given web3 game for free, one could set up the next gas policy.
+To let players mint new shields on a given web3 game for free, one could set the next gas policy up.
+This way, the gas fees (in MATIC) incurred from players minting new shields would be sponsored by the game.
+With this gas policy, players would still need to pay fees for other actions like transfering those shields.
  
 <div align="center">
   <img alt="sponsor mint" src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_30_at_18_47_17_091d85dde9.png" width="50%" height="50%"/>
@@ -109,8 +111,17 @@ To let players mint new shields on a given web3 game for free, one could set up 
 
 ### Let users pay in USDC for claiming in-game rewards
 
-The image below, would create a gas policy to allow players to claim rewards in USDC. 
+In the the image below, the gas policy would allow players to claim game rewards in USDC.
+As with the example above, players would still need to pay gas fees in the native token (MATIC in this case) for other actions related to such rewards.
 
 <div align="center">
   <img alt="rewards in USDC" src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_30_at_19_07_20_7ccae83360.png" width="50%" height="50%"/>
+</div>
+
+### Let players register session keys in custom token
+
+The following example policy would allow users to register new session keys paying the related costs in a custom token.
+
+<div align="center">
+  <img alt="rewards in USDC" src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_31_at_10_02_51_1cd0c933ba.png" width="50%" height="50%"/>
 </div>
