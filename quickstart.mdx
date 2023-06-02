@@ -6,13 +6,14 @@ export const description =
 This guide will get you all set up and ready to use the Openfort API. We'll cover how to get started using one of our API clients and how to make your first API request. We'll also look at where to go next to find all the information you need to take full advantage of our powerful REST API. {{ className: 'lead' }}
 
 <Note>
-  Before you can make requests to the Openfort API, you will need to grab your API keys from your dashboard.
-  You can find them in the [API keys](https://dashboard.openfort.xyz/apikeys) tab.
+  Before you can make requests to the Openfort API, you will need to grab your
+  API keys from your dashboard. You can find them in the [API
+  keys](https://dashboard.openfort.xyz/apikeys) tab.
 </Note>
 
 ## Choose Your Client
 
-Before making your first API request, you need to pick which API client you will use. In addition to good ol' cURL HTTP requests, Openfort offers clients for JavaScript, Unity, and Unreal. In the following example, you can see how to install each client.
+Before making your first API request, you need to pick which API client you will use. In addition to good ol' cURL HTTP requests, Openfort offers clients for JavaScript, Unity, and Unreal. 
 
 <CodeGroup >
   ```bash {{ title: 'cURL' }}
@@ -20,10 +21,10 @@ Before making your first API request, you need to pick which API client you will
   curl --version
   ```
 
-  ```js {{ language: 'js', title: 'Node.js' }}
-  // Install the Openfort Node SDK
-  npm install @openfort/openfort-node --save
-  ```
+```js {{ language: 'js', title: 'Node.js' }}
+// Install the Openfort Node SDK
+npm install @openfort/openfort-node --save
+```
 </CodeGroup>
 
 <div className="not-prose">
@@ -48,13 +49,14 @@ In the `cURL` example, results are limited to ten players.
     -d limit=10
   ```
 
-  ```js {{ title: 'Node.js' }}
-  import Openfort from '@openfort/openfort-node'
+```js {{ title: 'Node.js' }}
+import Openfort from '@openfort/openfort-node'
 
-  const openfort = new Openfort(YOUR_SECRET_KEY)
+const openfort = new Openfort(YOUR_SECRET_KEY)
 
-  await openfort.players.getPlayers()
-  ```
+await openfort.players.getPlayers()
+```
+
 </CodeGroup>
 
 <div className="not-prose">
@@ -65,11 +67,6 @@ In the `cURL` example, results are limited to ten players.
     children="Read the docs for the players endpoint"
   />
 </div>
-
-<Note>
-  <strong>Tip</strong>
-  <br /> When using cURL, you can setup an env variable `YOUR_SECRET_KEY` with your secret key. Then, the command above will work out of the box.
-</Note>
 
 ## What's Next?
 
