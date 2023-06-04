@@ -12,7 +12,7 @@ When using Openfort, you must create a `player` for each individual that wants t
 Each player can have accounts on different chains; they all will have the same public address.
 
 <div align="center">
-  <img alt="Playerandaccounts" src="https://blog-cms.openfort.xyz/uploads/Player_and_accounts_1943b35b8a.svg" width="35%" height="35%"/>
+  <img alt="player-account-relation" src="https://blog-cms.openfort.xyz/uploads/Player_and_accounts_1943b35b8a.svg" width="35%" height="35%"/>
 </div>
 
 ### What are Players?
@@ -21,7 +21,7 @@ You create players every time a user signs up in your platform.
 Players are used to identify users and enable them to interact with your game. Ideally, you want to create a player as soon as a new user signs up to your game and assing the newly created user with the `player_id` that Openfort returns.
 
 <div align="center">
-  <img alt="Playerandaccounts" src="https://blog-cms.openfort.xyz/uploads/player_signup_105a5cab0a.svg" width="75%" height="75%"/>
+  <img alt="player-sign-flow" src="https://blog-cms.openfort.xyz/uploads/player_signup_105a5cab0a.svg" width="75%" height="75%"/>
 </div>
 
 Openfort provides a [backend SDK](/libraries) you can use. Otherwise, you can use the [API](/api) directly.
@@ -45,9 +45,9 @@ The custodial sheme of that newly created account will depend on wether you prov
 
 ## Quickstart
 
-In this guide you'll learn how to create a player, stablish an account for it and then mint an asset with that newly created account.
+In this guide you'll learn how to create a player, create an account for it and then mint an NFT.
 
-### 1. Set up Openfort - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-50 text-gray-600 rounded-sm p-1 text-xs'>Server side</span>
+### 1. Set up Openfort - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span>
 
 Use our official libraries to access the Openfort API from your application:
 
@@ -59,13 +59,13 @@ Use our official libraries to access the Openfort API from your application:
 
 
 
-<CodeGroup title="Create an Openfort instance" label={'index.js'}>
+<CodeGroup title="Initialize '@openfort/openfort-node' wih your secret key" label={'index.js'}>
   ```js {{ language: 'js', title: 'Node.js' }}
   const openfort = require('@openfort/openfort-node')('sk_test_...');
   ```
 </CodeGroup>
 
-### 2. Create a Player - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-50 text-gray-600 rounded-sm p-1 text-xs'>Server side</span>
+### 2. Create a Player - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span>
 
 Whenever a new user signs up to your game, you'll need to create a player in Openfort.
 
@@ -87,77 +87,96 @@ Whenever a new user signs up to your game, you'll need to create a player in Ope
 
 After creating a player, you'll receive a `player_id` that you can use from this point on to interact with the Openfort API.
 
-### 3. (Custodial) Mint an asset with a Player - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-50 text-gray-600 rounded-sm p-1 text-xs'>Server side</span>
+### 3. Add the contract you want to interact with
+
+Add [Asset Contract](/asset-contracts) to your game project. In this example, we'll use a simple [ERC721](https://eips.ethereum.org/EIPS/eip-721) contract on the [Mumbai network](https://mumbai.polygonscan.com/) deployed at [0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0](https://mumbai.polygonscan.com/address/0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0).
+
+<CodeGroup title="Add an asset contract" tag="POST" label="/v1/contracts">
+  ```bash {{ title: 'cURL' }}
+  curl https://api.openfort.xyz/v1/contracts \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d chain_id=80001 \
+    -d address="0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0" \
+    -d name="Simple NFT" \
+    -d description="tutorial NFT asset"
+  ```
+</CodeGroup>
+
+This will return a `contract_id` that you can use from this point on to interact with the Openfort API. You can always identified by checking it's prefix `con_`.
+
+### 4. (Custodial) Mint an asset with a Player - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span>
 
 <CodeGroup title="Create a transaction" tag="POST" label="/v1/transaction_intents">
   ```bash {{ title: 'cURL' }}
-curl https://api.openfort.xyz/v1/transaction_intents \
-  -u YOUR_SECRET_KEY: \
-  -d player=pla_... \
-  -d optimistic=true \
-  -d chain_id=80001 \
-  -d "interactions[0][contract]=con_..." \
-  -d "interactions[0][function_name]=mint" \
-  -d "interactions[0][function_args][0]=pla_..."
+  curl https://api.openfort.xyz/v1/transaction_intents \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d player=pla_... \
+    -d optimistic=true \
+    -d chain_id=80001 \
+    -d "interactions[0][contract]=con_..." \
+    -d "interactions[0][function_name]=mint" \
+    -d "interactions[0][function_args][0]=pla_..."
   ```
   ```js {{ language: 'js', title: 'Node.js' }}
-    const player_id = pla_...;
-    const contract_id = con_...;
-    const chain_id = 80001;
-    const optimistic = true;
+  const player_id = pla_...;
+  const contract_id = con_...;
+  const chain_id = 80001;
+  const optimistic = true;
 
-    const interaction: Interaction = {
-      contract: contract_id,
-      functionName: "mint",
-      functionArgs: [player_id],
-    };
-    const transactionIntent =
-      await openfort.transactions.createTransactionIntent(
-        player_id,
-        chain_id,
-        optimistic,
-        [interaction]
-      );
+  const interaction: Interaction = {
+    contract: contract_id,
+    functionName: "mint",
+    functionArgs: [player_id],
+  };
+  const transactionIntent =
+    await openfort.transactions.createTransactionIntent(
+      player_id,
+      chain_id,
+      optimistic,
+      [interaction]
+    );
   ``` 
 </CodeGroup>
 
-### 3. (Self-custodial) Mint an asset with a Player - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-50 text-gray-600 rounded-sm p-1 text-xs'>Server side</span> <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-50 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
+If you want to learn more about how transaction intents work, visit our [Execute Intents](/execute-transactions) guide.
+
+### 4. (Self-custodial) Mint an asset with a Player - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span> <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
 
 To create a self-custodial account, you'll need to provide the `external_owner_address` when creating the transaction intent.
 If you don't provide it, a custodial account will be created instead.
 
 <CodeGroup title="Create a transaction" tag="POST" label="/v1/transaction_intents">
   ```bash {{ title: 'cURL' }}
-curl https://api.openfort.xyz/v1/transaction_intents \
-  -u YOUR_SECRET_KEY: \
-  -d player=pla_... \
-  -d optimistic=true \
-  -d chain_id=80001 \
-  -d external_owner_address="0x3809...3ac0" \
-  -d "interactions[0][contract]=con_..." \
-  -d "interactions[0][function_name]=mint" \
-  -d "interactions[0][function_args][0]=pla_..."
+  curl https://api.openfort.xyz/v1/transaction_intents \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d player=pla_... \
+    -d optimistic=true \
+    -d chain_id=80001 \
+    -d external_owner_address="0x3809...3ac0" \
+    -d "interactions[0][contract]=con_..." \
+    -d "interactions[0][function_name]=mint" \
+    -d "interactions[0][function_args][0]=pla_..."
   ```
   ```js {{ language: 'js', title: 'Node.js' }}
-    const player_id = pla_...;
-    const contract_id = con_...;
-    const chain_id = 80001;
-    const optimistic = true;
-    const external_owner_address = '0x3809...3ac0';
+  const player_id = pla_...;
+  const contract_id = con_...;
+  const chain_id = 80001;
+  const optimistic = true;
+  const external_owner_address = '0x3809...3ac0';
 
-    const interaction: Interaction = {
-      contract: contract_id,
-      functionName: "mint",
-      functionArgs: [player_id],
-    };
-    const transactionIntent =
-      await openfort.transactions.createTransactionIntent(
-        player_id,
-        chain_id,
-        optimistic,
-        [interaction],
-        external_owner_address
-      )?.body;
+  const interaction: Interaction = {
+    contract: contract_id,
+    functionName: "mint",
+    functionArgs: [player_id],
+  };
+  const transactionIntent =
+    await openfort.transactions.createTransactionIntent(
+      player_id,
+      chain_id,
+      optimistic,
+      [interaction],
+      external_owner_address
+    )?.body;
   ``` 
 </CodeGroup>
 
@@ -165,15 +184,15 @@ The response of this request will contain a `next_action` object.
 
 <CodeGroup title="next_action response object from transaction_intents">
   ```bash
-    "next_action": {
-        "type": "sign_with_wallet",
-        "payload": {
-            "user_op": {
-                "sender": "0x32a03030Cf534F299492a91cdeef5eD6A98558e2",
-                ...},
-            "user_op_hash": "0x91b4efe3648c79467f7b50aa9bb1b4eae383a52dd6d741d39ece29ed2ef8362d"
-        }
-    },
+  "next_action": {
+      "type": "sign_with_wallet",
+      "payload": {
+          "user_op": {
+              "sender": "0x32a03030Cf534F299492a91cdeef5eD6A98558e2",
+              ...},
+          "user_op_hash": "0x91b4efe3648c79467f7b50aa9bb1b4eae383a52dd6d741d39ece29ed2ef8362d"
+      }
+  },
   ``` 
 </CodeGroup>
 
@@ -181,14 +200,15 @@ Where you will need to sign the `user_op_hash` with the account you  specified i
 You have to then send the signed transaction back to Openfort.
 
 To do so, you can either use our [client SDK](/libraries) or use our [API](/https://www.openfort.xyz/docs/api/transaction_intents#sign-a-transaction-intent) directly.
-In this demo, let's say we are using our client SDK in a JavaScript environment. 
+In this demo, let's we'll be using the client SDK in a JavaScript environment. 
+
 <CodeGroup title="Install Openfort.js" label={'Command line'}>
   ```js {{ language: 'js', title: 'Openfort.js' }}
   npm install @openfort/openfort-js --save
   ```
 </CodeGroup> 
 
-<CodeGroup title="Create an Openfort instance" label={'index.js'}>
+<CodeGroup title="Initialize Openfort" label={'index.js'}>
   ```js {{ language: 'js', title: 'index.js' }}
   import { Openfort } from '@openfort/openfort-js';
   const openfort = new Openfort('pk_test_...');
@@ -203,21 +223,26 @@ In this demo, let's say we are using our client SDK in a JavaScript environment.
 The flow will look like this:
 
 <div align="center">
-  <img alt="Playerandaccounts" src="https://blog-cms.openfort.xyz/uploads/transaction_intent_72c635ad81.svg" width="75%" height="75%"/>
+  <img alt="transaction_intent-sign" src="https://blog-cms.openfort.xyz/uploads/transaction_intent_72c635ad81.svg" width="75%" height="75%"/>
 </div>
 
 
 
-### 4. Conclusion
+### 5. Conclusion
 
-There are a number of disadvantages from this current implementation:
+We now have a fully working implementation that allows us to mint assets for a player. Nevertheless, there are a two main disadvantages of this current implementation:
 
 - **The newly created account will need to have native tokens to pay for the transaction fees:**
-We can use Openfort policies to sponsor transactions for our users. This way, we can pay for the transaction fees of our users. 
+
+  We can use Openfort policies to sponsor transactions for our users. This way, we can pay for the transaction fees of our users. 
 Learn how to use them at [Sponsoring Transactions](/gas-payments).
 
 - **When non-custodial, the owner will need to sign each transaction introducing friction (e.g. pop-ups) to the user experience):**
-We can use Openfort session keys to create scoped session keys in client side. This way, we can sign transactions without UX interruptions.
+  
+  We can use Openfort session keys to create scoped session keys in client side. This way, we can sign transactions without UX interruptions.
 Learn how to use them at [Session Keys](/session-keys).
 
-Visit our [examples](/examples) to see a full working example of this quickstart
+
+Check out our working working examples of this quickstart:
+- Sample self-custodial account creating and asset minting application: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/rainbow-ssv-nextjs) and [video demo](https://youtu.be/rh2E02PATlU).
+- Sample email/social login with custodial account creating and asset minting application: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/ssv-social-nextjs) and [video demo](https://youtu.be/xBzl8hk__P8).

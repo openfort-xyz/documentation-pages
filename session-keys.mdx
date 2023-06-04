@@ -3,70 +3,206 @@ export const description =
 
 # Session Keys
 
-In the realm of web3 games, session keys can be a crucial aspect for securing player accounts as well as improving the overall gaming experience.
+Openfort uses session keys for securing player accounts while improving the overall gaming experience.
 Session keys can be used to authenticate players, authorize their actions within the game, and grant limited permissions to their web3 accounts.
 
 ## Overview
 
-Openfort has developed a robust internal infrastructure for handling session keys, ensuring secure and seamless player authentication.
-This infrastructure includes automated systems for generating, handling, and validating session keys, all managed through Openfort's API.
+Openfort has developed a robust internal infrastructure for handling session keys, ensuring secure and seamless player authentication. Moreover, you can find [client libraries](/libraries) for all major game developmentn platforms to help you manage the session keys.
 
-Session keys are cryptographic keys used to establish a secure connection between a player's device, the game server and the user's web3 account.
-They are generated inside the player's device and are used to authenticate requests from the player. Session keys are short-lived and typically expire after a certain period of inactivity or when the player logs out.
+Session keys are cryptographic key-pairs used to establish a secure connection between a player's device and their web3 account.
+They are generated in the client-side and are used to authenticate requests from the player. The public key is used to derive an address, used to register the new session key. The private key never leaves the users' device.
+
+Session keys are short-lived and typically expire after a certain period of inactivity or when the player logs out.
 
 To better understand how session keys work on Openfort, you can read our blog post [Technical Dive: Session Keys](https://www.openfort.xyz/blog/technical-dive-session-keys).
 
-## Registering Session Keys
+The typical flow for session keys is as follows:
 
-A player can register new session keys through the following Openfort API endpoint.
-The first example below shows the call to register a session key for a player using a custodial account.
-As they do not hold the private key of the administrator/owner wallet, no further actions are required from the player.
+<div align="center">
+  <img alt="session-registration-sign" src="https://strapi-oube.onrender.com/uploads/session_key_walkthrough_ff19816585.svg" width="75%" height="75%"/>
+</div>
 
-The created session key would be valid since the 25th of May 2023 at 7:50 GMT (timestamp `1685001000`) and last for 1 hour (timestamp `1685004600`).
-For a useful resource to calculate timestamps online, visit [UNIX Timestamp](https://www.unixtimestamp.com/).
+After this initial flow, the session key can be used to authenticate requests from the player.
 
-<CodeGroup title="Register a session key (custodial accounts)" tag="POST" label="/v1/sessions">
-  ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/sessions \
-    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
-    -d player=pla_... \
-    -d address=0x76e6...9341 \
-    -d chain_id=80001 \
-    -d valid_until=1685004600 \
-    -d valid_after=1685001000 \
-    -d policy=pol_...
+## Quickstart
+
+This guide will go though all the necessary steps to register a session key and then use it to mint an asset with the players' web3 account.
+This example will follow the steps to register a session key on the browser, but the same steps can be followed on any other client-side application.
+
+### 1. Create a session key - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
+
+After you have authenticated your user with your regular authentication system, you can create a session key for them. 
+To create a session key, you need to generate a key pair on the client-side and send the address computed from the public key to your server.
+
+Using one of the official Openfort [client libraries](/libraries) everything is handled for you.
+
+<CodeGroup title="Install Openfort.js" label={'Command line'}>
+  ```js {{ language: 'js', title: 'Openfort.js' }}
+  npm install @openfort/openfort-js --save
+  ```
+</CodeGroup> 
+
+<CodeGroup title="Initialize Openfort" label={'index.js'}>
+  ```js {{ language: 'js', title: 'index.js' }}
+  import { Openfort } from '@openfort/openfort-js';
+  const openfort = new Openfort('pk_test_...');
+  openfort.createSessionKey();
+  await openfort.saveSessionKey();
   ```
 </CodeGroup>
 
-The second example below, is an example of the API call that players with non-custodial accounts would use.
-Notice the extra `external_owner_address` parameter needed to indicate the actual [EOA](https://ethereum.org/en/developers/docs/accounts/) that will sign the authorization of the action.
-As they hold the private key of the administrator/owner wallet, the response of such call would contain an extra
-element called `next_action` which will need to be signed by the players EOA and returned in a successive API call.
+After creating and storing the session key, you can go ahead and register it.
 
-<CodeGroup title="Register a session key (non-custodial accounts)" tag="POST" label="/v1/sessions">
+### 2. Register a session key - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span> <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
+
+To register a session key, first send the address from the session key to your server.
+You can get the address from the session key object created above like this:
+<CodeGroup label={'index.js'}>
+  ```js {{ language: 'js', title: 'index.js' }}
+  const address = openfort.sessionKey.address;
+  ```
+</CodeGroup>
+
+Then, from your server you can make a request to the Openfort API or use one of our [server libraries](/libraries) to register the session key.
+
+<CodeGroup title="Install Openfort" label={'Command line'}>
+  ```js {{ language: 'js', title: 'Node.js' }}
+  npm install @openfort/openfort-node --save
+  ```
+</CodeGroup>
+
+
+
+<CodeGroup title="Initialize '@openfort/openfort-node' wih your secret key" label={'index.js'}>
+  ```js {{ language: 'js', title: 'Node.js' }}
+  const openfort = require('@openfort/openfort-node')('sk_test_...');
+  ```
+</CodeGroup>
+
+<CodeGroup title="Regsiter the session key using Openfort" label={'node.js'} label="/v1/sessions" tag="POST">
   ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/sessions \
+  curl https://api.openfort.xyz/v1/sessions \
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
     -d player=pla_... \
-    -d address=0x76e6...9341 \
+    -d address="0x76e6...9341" \
     -d chain_id=80001 \
     -d valid_until=1685004600 \
     -d valid_after=1685001000 \
+    -d external_owner_address="0x41e6...9341"; \
     -d policy=pol_...
-    -d external_owner_address=0x8a16...CE4a
   ```
+ ```js {{ language: 'js', title: 'Node.js' }}
+  const session_key_address = "0x76e6...9341"
+  const policy_id = "pol_..."
+  const player_id = "pla_..."
+  const valid_until = 1685001000;
+  const valid_after = 1685001000;
+  const chain_id = 80001;
+  const external_owner_address = "0x41e6...9341";
+  const playerSession = await openfort.players.createPlayerSession(
+    player_id,
+    session_key_address,
+    chain_id,
+    valid_until,
+    valid_after,
+    policy_id,
+    external_owner_address
+  );
+  ```
+</CodeGroup>
+
+The created session key would be valid since the 25th of May 2023 at 7:50 GMT (timestamp `1685001000`) and last for 1 hour (timestamp `1685001000`).
+For a useful resource to calculate timestamps online, visit [UNIX Timestamp](https://www.unixtimestamp.com/).
+
+Note how the `external_owner_address` parameter is used to indicate the address of owner of the account that will be created under the specified player. It's only necessary to specify this parameter when the player is doesn't yet have an account in that chain.
+
+Also, note how a `policy` is used to indicate the policy that will be used to sponsor the gas fees of the transaction to register the session key.
+
+### 3. Sign the session key - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
+
+The owner of the account of the player needs then to authorize the new session key.
+
+To do so, it needs to sign the `user_op_hash` from the `next_action` object returned by the API call to register the session key.
+
+<CodeGroup title="next_action response object from transaction_intents">
+  ```bash
+  "next_action": {
+      "type": "sign_with_wallet",
+      "payload": {
+          "user_op": {
+              "sender": "0x32a03030Cf534F299492a91cdeef5eD6A98558e2",
+              ...},
+          "user_op_hash": "0x91b4efe3648c79467f7b50aa9bb1b4eae383a52dd6d741d39ece29ed2ef8362d"
+      }
+  },
+  ``` 
 </CodeGroup>
 
 Once the content of the `next_action` parameter above is signed by the player's wallet,
-it has to be sent using the endpoint `/v1/sessions/:session/signature` as shown below:
+it has to be sent using the endpoint `/v1/sessions/:id/signature` as shown below:
 
-<CodeGroup title="Request" tag="POST" label="/v1/sessions/:session/signature">
+<CodeGroup title="Sign and send the session key registration" label={'index.js'}>
   ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/sessions/ses_.../signature \
+  curl https://api.openfort.xyz/v1/sessions/ses_.../signature \
     -H "Authorization: Bearer $YOUR_PUBLISHABLE_KEY" \
     -d "signature=xyz..."
+  ```
+  ```js {{ language: 'js', title: 'index.js' }}
+  await openfort.loadSessionKey()
+  await openfort.sendSignatureSessionRequest(
+    playerSession.id,
+    SIGNED_USED_OP-HASH,
+  );
+  ```
+</CodeGroup>
+
+### 4. Using the session key - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span> <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
+
+After the session key is registered, it can be used to authenticate requests from the player.
+Whenever you create a transaction intent from your backend, a signature will be needed from the session key or owner of the players' web3 account.
+
+<CodeGroup title="Create a transaction intent" label={'Node.js'}>
+  ```js {{ language: 'js', title: 'Node.js' }}
+  const player_id = "pla_zz..."
+  const policy_id = "pol_..."
+  const contract_id = "con_..."
+  const chain_id = 80001
+  const optimistic = true;
+
+  const interaction: Interaction = {
+    contract: contract_id,
+    functionName: "mint",
+    functionArgs: [player_id],
+  };
+  const transactionIntent =
+    await openfort.transactions.createTransactionIntent(
+      player_id,
+      chain_id,
+      optimistic,
+      [interaction],
+      policy_id
+    );
+  ```
+</CodeGroup>
+
+Therefore, from the request above, the session key will need to sign the next_action `user_op_hash` and send it to the API.
+
+<CodeGroup title="Load session key and sign a transaction intent" label={'index.js'}>
+  ```js {{ language: 'js', title: 'index.js' }}
+  await openfort.loadSessionKey()
+  const sessionSignedTransaction = openfort.signMessage(
+    collectResponseJSON.data.nextAction.payload.user_op_hash
+  );
+  const openfortTransactionResponse =
+    await openfort.sendSignatureTransactionIntentRequest(
+      collectResponseJSON.data.id,
+      sessionSignedTransaction
+    );
   ```
 </CodeGroup>
 
 For more information about how to use the sesion key endpoints, you can visit our [API documentation](https://www.openfort.xyz/docs/api/sessions).
 
+Check out our working working examples of this quickstart:
+- Sample registering a session key with an account with a self-custodied signer: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/rainbow-ssv-nextjs) and [video demo](https://youtu.be/rh2E02PATlU).

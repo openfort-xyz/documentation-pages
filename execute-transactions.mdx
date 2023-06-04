@@ -24,18 +24,27 @@ Openfort's infrastructure verifies the transaction request, updates the blockcha
   <img alt="TXIntent" src="https://blog-cms.openfort.xyz/uploads/Tx_intent2_e692df6a50.svg" />
 </div>
 
-## Simple Transaction
 
-To execute a simple transaction via the Openfort API, players just need to send a transaction intent with the necessary details, such as the player, chain id, policy, contract to interact with and its required arguments.
+<Note>
+  <strong>Notice: </strong>
+  <br /> In order to execute the transaction intents, the players' account should have native tokens in the network to pay for transaction fees.
+  If you want to be able to sponsor transaction gas or allow players to pay them in ERC20, you can use a policy.
+  <br /> Visit [Gas policies](/gas-payments) for more information.
+</Note>
+
+
+## Custodial vs Non-Custodial
+
+To execute a transaction intent via the Openfort API, players just need to send a transaction intent with the necessary details, such as the player, chain id, policy, contract to interact with and its required arguments.
 - If the player is using a custodial account, no further action is required from their side. The operation will be processed by Openfort and it will be sent on-chain.
-- If the player is using a non-custodial account, given that they are the only ones in possession of the secret key, they must approve the transaction. For that, they will receive a `next_action` with the information that Openfort wants to send on-chain. The player will need to sign it locally send it and send it using the `/v1/sessions/:session/signature` endpoint. If signed correctly, this will successfully authorize a transaction intent for the assigned account.
+- If the player is using a non-custodial account, given that they are the only ones in possession of the secret key, they must approve the transaction. For that, they will receive a `next_action` with the information that Openfort wants to send on-chain. The player will need to sign it locally send it and send it using the `/v1/transaction_intents/:id/signature` endpoint. If signed correctly, this will successfully authorize a transaction intent for the assigned account.
 
 As an example, let's execute a minting of an asset via a simple transaction API call.
 If the player is using a custodial account, no further action is required and we can expect the minting to take place immediately after sending the following call:
 
 <CodeGroup title="Create a transaction intent to mint" tag="POST" label="/v1/transaction_intents">
   ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/transaction_intents \
+  curl https://api.openfort.xyz/v1/transaction_intents \
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
     -d player=pla_... \
     -d chain_id=80001 \
@@ -46,15 +55,31 @@ If the player is using a custodial account, no further action is required and we
   ```
 </CodeGroup>
 
-However, if the API call was performed by a player using a non-custodial account, the response of the call above would contain a `next_action` parameter explained above.
-That parameter indicates the information that the player needs to sign to approve the transaction intent.
-Once signed, the player needs to send such signature using the `/v1/sessions/:session/signature` endpoint.
+However, if the API call was performed by a player using a non-custodial account, the response of the call above would contain a `next_action` parameter like so:
+
+<CodeGroup title="next_action response object from transaction_intents">
+  ```bash
+  "next_action": {
+      "type": "sign_with_wallet",
+      "payload": {
+          "user_op": {
+              "sender": "0x32a03030Cf534F299492a91cdeef5eD6A98558e2",
+              ...},
+          "user_op_hash": "0x91b4efe3648c79467f7b50aa9bb1b4eae383a52dd6d741d39ece29ed2ef8362d"
+      }
+  },
+  ``` 
+</CodeGroup>
+
+Where you will need to sign the `user_op_hash` with the signer that owns the account of the player field.
+
+Once signed, send the signature using the `/v1/transaction_intents/:id/signature` endpoint or use our [client SDK](/libraries).
 The player's request must be authenticated with the publishable Openfort key (see `$YOUR_PUBLISHABLE_KEY` in the request below).
 For more information about Secret vs Publishable Keys, you can visit out [API keys docs](https://www.openfort.xyz/docs/keys#api-keys).
 
-<CodeGroup title="Sign a transaction intent to mint" tag="POST" label="/v1/transaction_intents/:transaction_intent/signature">
+<CodeGroup title="Sign a transaction intent to mint" tag="POST" label="/v1/transaction_intents/:id/signature">
   ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/transaction_intents/tin_.../signature \
+  curl https://api.openfort.xyz/v1/transaction_intents/tin_.../signature \
     -H "Authorization: Bearer $YOUR_PUBLISHABLE_KEY" \
     -d "signature=0x9330...351c"
   ```
@@ -62,24 +87,56 @@ For more information about Secret vs Publishable Keys, you can visit out [API ke
 
 If signed correctly, this will successfully authorize a transaction intent for the assigned account.
 
+## Transaction Types
+
+### Simple Transactions
+In Openfort, interactions in the blockchain are defined in the field `interactions` of the transaction intent.
+The `interactions` field is an array of objects that contain the information of the contract to interact with, the function to call, and the arguments to pass to the function.
+
+<CodeGroup title="Interactions within a transaction intent">
+  ```bash {{ title: 'Interactions' }}
+    -d interactions[0][contract]="con_..." \
+    -d interactions[0][function_name]="mint" \
+    -d interactions[0][function_args]="0x63B7...484f"
+  ```
+</CodeGroup>
+
+As you can see, the `interactions` field contains the contract `con_` that has previously been added to Openfort.
+
+Also, the function name defines the function to call from within the contract. If there exist more than one function with the same name, the function arguments will be used to determine which function to call.
+
+Finally, the function arguments are passed as an array of strings. The order of the arguments is important and must match the order of the function's parameters.
+
+
+### Batched Transactions
+
+Openforts' smart contract accounts are able to execute multiple transactions in a batch.
+With batched transactions, you can save time and reduce gas costs by submitting multiple operations at once.
+
+To execute a batch transaction, you can send a transaction intent with multiple interactions.
+Each interaction will be executed in the order they are received.
+If any of the interactions fail, the entire batch will fail and no changes will be made to the blockchain.
+
+<CodeGroup title="Interactions within a transaction intent">
+  ```bash {{ title: 'Interactions' }}
+    -d interactions[0][contract]="con_..." \
+    -d interactions[0][function_name]="mint" \
+    -d interactions[0][function_args]="0x63B7...484f" \
+    -d interactions[1][contract]="con_..." \
+    -d interactions[1][function_name]="mint" \
+    -d interactions[1][function_args]="0x32B7...213d"
+  ```
+</CodeGroup>
+
 <Note>
-  <strong>Notice: </strong>
-  <br /> In order to execute the transaction intents above, the player should have native tokens in the account to pay for transaction fees.
-  If you want to be able to sponsor transaction gas or allow players to pay them in ERC20, you can use a policy.
-  <br /> Visit [Gas policies](/gas-payments) for more information.
+  <strong>Did you know? </strong>
+  <br /> Batch transactions are also safer, thanks to a property known as "atomicity".
+  <br /> This means that either all transactions within the batch will execute or none of them will, ensuring that your operations are executed seamlessly without any room for errors.
 </Note>
 
-## Batched Transactions
-
-One of the many advantages of smart contract wallets is the ability to execute multiple transactions as a single batch.
-With batch transactions, you can save time and reduce gas costs by submitting multiple operations at once.
-
-Batch transactions are also safer, thanks to a property known as "atomicity".
-This means that either all transactions within the batch will execute or none of them will, ensuring that your operations are executed seamlessly without any room for errors.
-
-<CodeGroup title="Execute a batch transaction" tag="POST" label="/v1/transaction_intents">
+<CodeGroup title="Example batch transaction intent" tag="POST" label="/v1/transaction_intents">
   ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/transaction_intent \
+  curl https://api.openfort.xyz/v1/transaction_intent \
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
     -d player="pla_..." \
     -d chain_id=5 \
@@ -88,6 +145,6 @@ This means that either all transactions within the batch will execute or none of
     -d interactions[0][function_args]="0x63B7...484f" \
     -d interactions[1][contract]="con_..." \
     -d interactions[1][function_name]="mint" \
-    -d interactions[1][function_args]="0x63B7...484f"
+    -d interactions[1][function_args]="0x32B7...213d"
   ```
 </CodeGroup>

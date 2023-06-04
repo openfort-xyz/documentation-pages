@@ -17,7 +17,7 @@ In a web3 game, supporting different types of assets is crucial. This includes:
 - In-game items: virtual items that players can acquire, trade, or use within the game. Examples include weapons, armor, or virtual pets.
 - In-game currencies: These are virtual currencies that players can use to purchase items or services within the game. Examples include gold, gems, or tokens specific to the game's economy.
 
-## How Asset Contracts Work
+### How Asset Contracts Work
 
 Assets in a web3 game are defined by smart contracts on the blockchain.
 These smart contracts contain the logic and data associated with the assets, including ownership, transferability, and functionality.
@@ -31,29 +31,40 @@ Openfort supports your own asset contracts:
 - External Item Contract Support: This involves interacting with external smart contracts that govern the behavior of in-game items, such as their attributes, properties, or functionality.
 - External Marketplace Support: This involves interacting with external marketplaces where players can buy, sell, or trade in-game assets with other players.
 
-## Asset Verification
+### Asset Verification
 
 To create and manage assets in a web3 game, developers need to verify the smart contracts of such assets.
 Verification ensures that the smart contracts are legitimate, secure, and compatible with the game's mechanics.
+
+## Quickstart
+
+In this guide, we'll use a simple [ERC721](https://eips.ethereum.org/EIPS/eip-721) contract on the [Mumbai network](https://mumbai.polygonscan.com/) deployed at [0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0](https://mumbai.polygonscan.com/address/0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0).
+
+### 1. (Dashboard) Add an asset contract to your game project
 
 Create a new contract by clicking the `Add` button in the "Asset contracts" section, then enter:
 
 - The name of the contract (it can be any name you want; the name is only for identification purposes)
 - The address of the contract.
-- The ABI of the contract.
+- The Application Binary Interface (ABI) of the contract.
 - The network where the smart contract is located.
 
-You can obtain the ABI of a contract in several ways, such as through manual entry or by consulting your developers if the ABI is not verified.
+<Note>
+  <strong>Note: </strong>
+  <br /> The ABI is automatically fetched for you when you enter the address of the contract. If the contract is not verified on the block explorer, you will need to enter the ABI manually.
+</Note>
+
+### 1. (API) Add an asset contract to your game project
 
 You can also add an asset by directly using the API:
 
 <CodeGroup title="Create a contract of an asset" tag="POST" label="/v1/contracts">
   ```bash {{ title: 'cURL' }}
-    curl https://api.openfort.xyz/v1/contracts \
+  curl https://api.openfort.xyz/v1/contracts \
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
     -d name="SimpleNFT" \
     -d address=0x416c...354D \
-    -d chain_id=5
+    -d chain_id=80001
   ```
 </CodeGroup>
 
