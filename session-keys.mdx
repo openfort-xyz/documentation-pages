@@ -58,7 +58,7 @@ After creating and storing the session key, you can go ahead and register it.
 
 To register a session key, first send the address from the session key to your server.
 You can get the address from the session key object created above like this:
-<CodeGroup label={'index.js'}>
+<CodeGroup title="Get address from session key" label={'index.js'}>
   ```js {{ language: 'js', title: 'index.js' }}
   const address = openfort.sessionKey.address;
   ```
@@ -74,13 +74,22 @@ Then, from your server you can make a request to the Openfort API or use one of 
 
 
 
-<CodeGroup title="Initialize '@openfort/openfort-node' wih your secret key" label={'index.js'}>
+<CodeGroup title="Initialize '@openfort/openfort-node' wih your secret key" label={'Node.js'}>
   ```js {{ language: 'js', title: 'Node.js' }}
-  const openfort = require('@openfort/openfort-node')('sk_test_...');
+  import Openfort from "@openfort/openfort-node";
+  const openfort = new Openfort('sk_test_...');
   ```
 </CodeGroup>
 
-<CodeGroup title="Regsiter the session key using Openfort" label={'node.js'} label="/v1/sessions" tag="POST">
+The created session key would be valid since the 25th of May 2023 at 7:50 GMT (timestamp `1685001000`) and last for 1 hour (timestamp `1685001000`).
+For a useful resource to calculate timestamps online, visit [UNIX Timestamp](https://www.unixtimestamp.com/).
+
+Note how the `external_owner_address` parameter is used to indicate the address of owner of the account that will be created under the specified player. It's only necessary to specify this parameter when the player is doesn't yet have an account in that chain.
+
+Also, note how a `policy` is used to indicate the policy that will be used to sponsor the gas fees of the transaction to register the session key.
+
+
+<CodeGroup title="Register the session key using Openfort" label={'node.js'} label="/v1/sessions" tag="POST">
   ```bash {{ title: 'cURL' }}
   curl https://api.openfort.xyz/v1/sessions \
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
@@ -112,12 +121,6 @@ Then, from your server you can make a request to the Openfort API or use one of 
   ```
 </CodeGroup>
 
-The created session key would be valid since the 25th of May 2023 at 7:50 GMT (timestamp `1685001000`) and last for 1 hour (timestamp `1685001000`).
-For a useful resource to calculate timestamps online, visit [UNIX Timestamp](https://www.unixtimestamp.com/).
-
-Note how the `external_owner_address` parameter is used to indicate the address of owner of the account that will be created under the specified player. It's only necessary to specify this parameter when the player is doesn't yet have an account in that chain.
-
-Also, note how a `policy` is used to indicate the policy that will be used to sponsor the gas fees of the transaction to register the session key.
 
 ### 3. Sign the session key - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
 
@@ -139,22 +142,23 @@ To do so, it needs to sign the `user_op_hash` from the `next_action` object retu
   ``` 
 </CodeGroup>
 
-Once the content of the `next_action` parameter above is signed by the player's wallet,
-it has to be sent using the endpoint `/v1/sessions/:id/signature` as shown below:
+Once the content of the `next_action` parameter above is signed by the owner of the account,
+it has to be sent to Openfort using the endpoint `/v1/sessions/:id/signature` as shown below:
 
 <CodeGroup title="Sign and send the session key registration" label={'index.js'}>
   ```bash {{ title: 'cURL' }}
   curl https://api.openfort.xyz/v1/sessions/ses_.../signature \
     -H "Authorization: Bearer $YOUR_PUBLISHABLE_KEY" \
-    -d "signature=xyz..."
+    -d signature="xyz..."
   ```
   ```js {{ language: 'js', title: 'index.js' }}
   await openfort.loadSessionKey()
   await openfort.sendSignatureSessionRequest(
     playerSession.id,
-    SIGNED_USED_OP-HASH,
+    SIGNED_USED_OP_HASH,
   );
   ```
+
 </CodeGroup>
 
 ### 4. Using the session key - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span> <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
@@ -164,7 +168,7 @@ Whenever you create a transaction intent from your backend, a signature will be 
 
 <CodeGroup title="Create a transaction intent" label={'Node.js'}>
   ```js {{ language: 'js', title: 'Node.js' }}
-  const player_id = "pla_zz..."
+  const player_id = "pla_..."
   const policy_id = "pol_..."
   const contract_id = "con_..."
   const chain_id = 80001
@@ -186,7 +190,7 @@ Whenever you create a transaction intent from your backend, a signature will be 
   ```
 </CodeGroup>
 
-Therefore, from the request above, the session key will need to sign the next_action `user_op_hash` and send it to the API.
+After creating the transaction intent, the session key will need to sign the next_action `user_op_hash` and send it to Openfort.
 
 <CodeGroup title="Load session key and sign a transaction intent" label={'index.js'}>
   ```js {{ language: 'js', title: 'index.js' }}

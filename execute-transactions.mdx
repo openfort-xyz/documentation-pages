@@ -36,8 +36,8 @@ Openfort's infrastructure verifies the transaction request, updates the blockcha
 ## Custodial vs Non-Custodial
 
 To execute a transaction intent via the Openfort API, players just need to send a transaction intent with the necessary details, such as the player, chain id, policy, contract to interact with and its required arguments.
-- If the player is using a custodial account, no further action is required from their side. The operation will be processed by Openfort and it will be sent on-chain.
-- If the player is using a non-custodial account, given that they are the only ones in possession of the secret key, they must approve the transaction. For that, they will receive a `next_action` with the information that Openfort wants to send on-chain. The player will need to sign it locally send it and send it using the `/v1/transaction_intents/:id/signature` endpoint. If signed correctly, this will successfully authorize a transaction intent for the assigned account.
+- If the player is using a **custodial account**, no further action is required from their side. The operation will be processed by Openfort and it will be sent on-chain.
+- If the player is using a **non-custodial account**, given that they are the only ones in possession of the secret key, they must approve the transaction. For that, they will receive a `next_action` with the information that Openfort wants to send on-chain. The player will need to sign it locally send it and send it using the `/v1/transaction_intents/:id/signature` endpoint. If signed correctly, this will successfully authorize a transaction intent for the assigned account.
 
 As an example, let's execute a minting of an asset via a simple transaction API call.
 If the player is using a custodial account, no further action is required and we can expect the minting to take place immediately after sending the following call:
