@@ -13,21 +13,18 @@ This guide will get you all set up and ready to use the Openfort API. We'll cove
   keys](https://dashboard.openfort.xyz/apikeys) tab.
 </Note>
 
-## Choose Your Client
+## 1. Choose Your Client
 
 Before making your first API request, you need to pick which API client you will use. In addition to good ol' cURL HTTP requests, Openfort offers clients for JavaScript, Unity, and Unreal.
 
-<CodeGroup >
-  ```bash {{ title: 'cURL' }}
-  # cURL is most likely already installed on your machine
-  curl --version
-  ```
-
-```js {{ language: 'js', title: 'Node.js' }}
-// Install the Openfort Node SDK
+<CodeGroup title="Create a new folder and install @openfort/openfort-node">
+```bash {{ title: 'bash'  }}
+mkdir openfort-tutorial
+cd openfort-tutorial
+npm init -y
 npm install @openfort/openfort-node --save
+touch index.js
 ```
-
 </CodeGroup>
 
 <div className="not-prose">
@@ -39,28 +36,101 @@ npm install @openfort/openfort-node --save
   />
 </div>
 
-## Making Your First API Request
+## 2. Create a player
 
-After picking your preferred client, you are ready to make your first call to the Openfort API.
-Below, you can see how to send a `GET` request to the `players` endpoint to get a list of all your players.
-In the `cURL` example, results are limited to ten players.
-
-<CodeGroup tag="GET" label="/v1/players">
-  ```bash {{ title: 'cURL' }}
-  curl -G https://api.openfort.xyz/v1/players \
-    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
-    -d limit=10
-  ```
-
-```js {{ title: 'Node.js' }}
+<CodeGroup tag="POST" label="/v1/players">
+```js {{ title: 'index.js' }}
 import Openfort from '@openfort/openfort-node'
-
 const openfort = new Openfort(YOUR_SECRET_KEY)
 
-await openfort.players.getPlayers()
+const player = await openfort.players.createPlayer(
+  "John Doe",
+  "Tutorial created account"
+);
 ```
-
 </CodeGroup>
+
+## 3. Create a policy
+
+Policies are how you define how the gas of the blockchain transaction is going to get paid.
+The easiest way to create a policy is through the Dashboard, although it's also possible through the API.
+
+To define a `policy` we first need to define a contract that we will use to see what functions we want to sponsor.
+### Add the asset contract
+
+In this tutorial, we'll use a simple [ERC-721](https://eips.ethereum.org/EIPS/eip-721) contract on the [Mumbai network](https://mumbai.polygonscan.com/) deployed at [0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0](https://mumbai.polygonscan.com/address/0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0).
+
+<CodeGroup title="Add an asset contract" tag="POST" label="/v1/contracts">
+  ```bash {{ title: 'cURL' }}
+  curl https://api.openfort.xyz/v1/contracts \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d chain_id=80001 \
+    -d address="0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0" \
+    -d name="Simple NFT" \
+    -d description="tutorial NFT asset"
+  ```
+</CodeGroup>
+
+This will return an `id` that you can use from this point on. Note that it's identified by it's prefix `con_`.
+
+### Using the dashboard
+
+  <div align="center">
+    <img
+      alt="sponsor mint"
+      src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_05_30_at_18_47_17_091d85dde9.png"
+      width="50%"
+      height="50%"
+    />
+  </div>
+
+  After creating the `policy`, simply copy the policy `id` from the dashboard. You can identify it because it starts with the prefix `pol_`.
+
+## 4. Collect an asset
+
+You're ready to collect your asset.
+
+<CodeGroup tag="POST" label="/v1/transaction_intents">
+```js {{ title: 'index.js' }}
+const player_id = player.body.id;
+const policy_id = "pol_182c7c1f-1e8d-4363-8b66-532f57b2e56e";
+const contract_id = "con_542f32a1-f895-447b-b9cd-e7a109671b0f";
+const chain_id = 80001;
+const optimistic = true;
+
+const interaction_mint = {
+  contract: contract_id,
+  functionName: "mint",
+  functionArgs: [player_id],
+};
+
+const transactionIntent =await openfort.transactions.createTransactionIntent(
+    player_id,
+    chain_id,
+    optimistic,
+    [interaction_mint],
+    policy_id
+  );
+```
+</CodeGroup>
+
+### 4.1. Create a batched transaction
+
+If you want to create a batched transaction, you can do so by adding more interactions to the array.
+
+<CodeGroup tag="POST" label="/v1/transaction_intents">
+```js {{ title: 'index.js' }}
+const transactionIntent =await openfort.transactions.createTransactionIntent(
+    player_id,
+    chain_id,
+    optimistic,
+    [interaction_mint, interaction_mint],
+    policy_id
+  );
+```
+</CodeGroup>
+
+
 
 <div className="not-prose">
   <Button
@@ -71,9 +141,20 @@ await openfort.players.getPlayers()
   />
 </div>
 
+<div className="not-prose">
+  <Button
+    href="/api/transaction_intents"
+    variant="text"
+    arrow="right"
+    children="Read the docs for the transaction_intents endpoint"
+  />
+</div>
+
 ## What's Next?
 
-Great, you're now set up with an API client and have made your first request to the API. Here are a few links that might be handy as you venture further into the Openfort API:
+Great, you're now set up with an API client and have made your first requests to the API. 
+In this tutorial, you created a managed account. You can also create self-custodial accounts and enable pop-upless blockchain interactions. 
+Here are a few links that might be handy as you venture further into the Openfort API:
 
-- [Grab your API key from the Openfort dashboard](https://dashboard.openfort.xyz/apikeys)
-- [Learn about the different error messages in Openfort](/api/errors)
+- [Pop-upless blockchain interactions](/session-keys)
+- [Going from a managed wallet to a self-custodial wallet](/transfer-account-ownership)
