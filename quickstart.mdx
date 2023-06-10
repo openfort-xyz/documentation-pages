@@ -38,15 +38,18 @@ touch index.js
 
 ## 2. Create a player
 
-<CodeGroup tag="POST" label="/v1/players">
+<CodeGroup>
 ```js {{ title: 'index.js' }}
 import Openfort from '@openfort/openfort-node'
 const openfort = new Openfort(YOUR_SECRET_KEY)
 
-const player = await openfort.players.createPlayer(
-  "John Doe",
-  "Tutorial created account"
-);
+const main = async () => {
+  const player = await openfort.players.createPlayer(
+    "John Doe",
+    "Tutorial created account"
+  );
+}
+main().then(() => process.exit(0))
 ```
 </CodeGroup>
 
@@ -88,9 +91,9 @@ This will return an `id` that you can use from this point on. Note that it's ide
 
 ## 4. Collect an asset
 
-You're ready to collect your asset.
+You're ready to collect your asset. Just bellow creating the player, add the following code:
 
-<CodeGroup tag="POST" label="/v1/transaction_intents">
+<CodeGroup>
 ```js {{ title: 'index.js' }}
 const player_id = player.body.id;
 const policy_id = "pol_182c7c1f-1e8d-4363-8b66-532f57b2e56e";
@@ -118,7 +121,7 @@ const transactionIntent =await openfort.transactions.createTransactionIntent(
 
 If you want to create a batched transaction, you can do so by adding more interactions to the array.
 
-<CodeGroup tag="POST" label="/v1/transaction_intents">
+<CodeGroup>
 ```js {{ title: 'index.js' }}
 const transactionIntent =await openfort.transactions.createTransactionIntent(
     player_id,
@@ -149,6 +152,21 @@ const transactionIntent =await openfort.transactions.createTransactionIntent(
     children="Read the docs for the transaction_intents endpoint"
   />
 </div>
+
+## 5. Debugging and inspecting your transaction
+
+The easiest way to inspect your recently created transaction is through the dashboard.
+You can find a dedicated page with logs and events from each transaction intent as well as the policy and gas used at [https://dashboard.openfort.xyz/transactions/YOUR-TRANSACTION-INTENT-ID](https://dashboard.openfort.xyz/transactions/dashboard).
+
+  <div align="center">
+    <img
+      alt="transaction intent dashboard"
+      src="https://blog-cms.openfort.xyz/uploads/Screenshot_2023_06_10_at_14_22_59_08dcdea58d.png"
+      width="70%"
+      height="70%"
+    />
+  </div>
+
 
 ## What's Next?
 

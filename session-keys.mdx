@@ -8,12 +8,25 @@ Session keys can be used to authenticate players, authorize their actions within
 
 ## Overview
 
-Openfort has developed a robust internal infrastructure for handling session keys, ensuring secure and seamless player authentication. Moreover, you can find [client libraries](/libraries) for all major game developmentn platforms to help you manage the session keys.
+With a conventional web3 account, there's only one key -- the private key that is able to sign any transactions for the account. 
+If you own the key, you own the account. That's why it's so critical that you never lose or reveal your private key.
 
-Session keys are cryptographic key-pairs used to establish a secure connection between a player's device and their web3 account.
-They are generated in the client-side and are used to authenticate requests from the player. The public key is used to derive an address, used to register the new session key. The private key never leaves the users' device.
+With a game-oriented system like Openfort, however, the account is decoupled from the key: the player can generate and use session keys that can issue transactions on their behalf.
 
-Session keys are short-lived and typically expire after a certain period of inactivity or when the player logs out.
+In the typical flow, once a player is authenticated, a session key is created client-side. 
+The public key derived from this session key is used to register it in the blockchain through Openfort's system. 
+The player's account owner then needs to authorize this new session key. 
+Once authorized, the session key can be used to authenticate requests from the player. 
+The private key, crucially, never leaves the player's device​​.
+
+In Openfort it's even possible to limit the permissions and duration of a session key. 
+For example, the player may create a session key that's only valid for one gaming session, and can only be used to authenticate certain types of requests. 
+Such a key is known as a "session key" in the Openfort ecosystem
+
+Openfort has developed a robust internal infrastructure for handling session keys, ensuring secure and seamless player authentication. 
+Moreover, you can find [client libraries](/libraries) for all major game development platforms to help you manage the session keys.
+
+## How session keys work
 
 To better understand how session keys work on Openfort, you can read our blog post [Technical Dive: Session Keys](https://www.openfort.xyz/blog/technical-dive-session-keys).
 
