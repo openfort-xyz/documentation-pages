@@ -99,7 +99,9 @@ For a useful resource to calculate timestamps online, visit [UNIX Timestamp](htt
 
 Note how the `external_owner_address` parameter is used to indicate the address of owner of the account that will be created under the specified player. It's only necessary to specify this parameter when the player is doesn't yet have an account in that chain.
 
-Also, note how a `policy` is used to indicate the policy that will be used to sponsor the gas fees of the transaction to register the session key.
+Also, note how a `policy` is used to indicate the policy that will be used to sponsor the gas fees of the transaction to register the session key. 
+
+In this example `external_owner_address` is used to indicate the address of the owner of the account that will be created under the specified player.
 
 
 <CodeGroup title="Register the session key using Openfort" label={'node.js'} label="/v1/sessions" tag="POST">
@@ -133,6 +135,17 @@ Also, note how a `policy` is used to indicate the policy that will be used to sp
   );
   ```
 </CodeGroup>
+
+After registering the session key, you can see it in the dashboard under the player's page.
+
+<div align="center">
+  <img
+    alt="DashboardRegisterSessionKey"
+    src="https://blog-cms.openfort.xyz/uploads/dashboard_session_keys_931c5a570a.png"
+    width="70%"
+    height="70%"
+  />
+</div>
 
 
 ### 3. Sign the session key - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
@@ -180,6 +193,14 @@ After the session key is registered, it can be used to authenticate requests fro
 Whenever you create a transaction intent from your backend, a signature will be needed from the session key or owner of the players' web3 account.
 
 <CodeGroup title="Create a transaction intent" label={'Node.js'}>
+  ```bash {{ title: 'cURL' }}
+  curl https://api.openfort.xyz/v1/transaction_intents \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d player=pla_... \
+    -d address="0x76e6...9341" \
+    -d chain_id=80001 \
+    -d policy=pol_...
+  ```
   ```js {{ language: 'js', title: 'Node.js' }}
   const player_id = "pla_..."
   const policy_id = "pol_..."
@@ -219,7 +240,55 @@ After creating the transaction intent, the session key will need to sign the nex
   ```
 </CodeGroup>
 
+### 5. Revoke a session key - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span> <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span>
+
+The owner of the account can always revoke the session key.
+
+To do so, it needs to sign the `user_op_hash` from the `next_action` object returned by the API call to revoke the session key.
+
+<CodeGroup title="Create a transaction intent" label={'Node.js'}>
+  ```bash {{ title: 'cURL' }}
+  curl https://api.openfort.xyz/v1/sessions/revoke \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d player=pla_... \
+    -d address="0x76e6...9341" \
+    -d chain_id=80001 \
+    -d policy=pol_...
+  ```
+  ```js {{ language: 'js', title: 'Node.js' }}
+  const player_id = "pla_..."
+  const policy_id = "pol_..."
+  const chain_id = 80001
+  const session_key_address = "0x76e6...9341"
+
+  const revokeSessionRequest: RevokePlayerSessionRequest = {
+      playerId: player_id,
+      address: session_key_address,
+      chainId: chain_id,
+      policy: policy_id,
+  };
+  ```
+</CodeGroup>
+
+
+<CodeGroup title="Sign the transaction to revoke the session key and remove from client side" label={'index.js'}>
+  ```js {{ language: 'js', title: 'index.js' }}
+  const revokeResponseJSON = // Response from the server side request.
+  const sessionSignedTransaction = // sign the user_op_hash with the owner of the account
+  const openfortTransactionResponse =
+    await openfort.sendSignatureTransactionIntentRequest(
+      revokeResponseJSON.data.id,
+      sessionSignedTransaction
+    );
+  openfort.removeSessionKey();
+  ```
+</CodeGroup>
+
+### 6. Conclusion
+
+We now have a fully working implementation that allows us to perform actions with self-custodial accounts without any pop-ups or browser extensions.
+
 For more information about how to use the sesion key endpoints, you can visit our [API documentation](https://www.openfort.xyz/docs/api/sessions).
 
 Check out our working working examples of this quickstart:
-- Sample registering a session key with an account with a self-custodied signer: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/rainbow-ssv-nextjs) and [video demo](https://youtu.be/rh2E02PATlU).
+- Sample registering a session key with an account with a self-custodied signer: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/rainbow-ssv-nextjs) and [video walkthrough](https://youtu.be/rh2E02PATlU).

@@ -2,10 +2,86 @@ export const description =
   'In this guide, we will talk about how gaming ecosystems can benefit from Openfort.'
 
 # Gaming Ecosystems
-Gaming ecosystems are a network of games with a consistent and standard single sign-on auth flow across them. Such ecosystems can greatly benefit from Openfort's solutions enabling new degrees of game interoperability, frictionless player experiences, new asset ownership model, and more.
+Gaming ecosystems are a network of games with a consistent and standard single sign-on auth flow across them. 
+Such ecosystems can greatly benefit from Openfort's solutions enabling new degrees of game interoperability, frictionless player experiences, new asset ownership model, and more.
+
+Ecosystems allow your partnered games to implement a "Login with Ecosystem Name Here" single sign-on flow for their games. This will enable players within your ecosystem to use one account that interoperates frictionlessly across many games without ever dealing with transactions or needing gas.
 
 ## Overview
 
-All games that are part of an ecosystem can leverage its [Single Sign-On (SSO)](https://en.wikipedia.org/wiki/Single_sign-on) to seamlessly interact with web3 assets from other games of the same ecosystem. Below, it is possible to see how this could be achieved:
+These ecosystems that support many games enable unique experiences for players. 
+Openfort provides a standard framework for ecosystems of games through a highly flexible and frictionless product suite. 
+Below, it is possible to see how this could be achieved:
 
-![Ecosystems.excalidraw.svg](https://blog-cms.openfort.xyz/uploads/Gaming_ecosystem_8e09dff2fd.svg)
+<div align="center">
+  <img
+    alt="ecosystem diagram"
+    src="https://blog-cms.openfort.xyz/uploads/Gaming_ecosystem_8e09dff2fd.svg"
+    width="80%"
+    height="80%"
+  />
+</div>
+
+Creating a game ecosystem allows things such as:
+
+- **Single Sign On Across Games**: Use one player profile at the ecosystem level as a single sign-on (SSO) for any game within the ecosystem.
+- **Interoperability**: Cross-game interoperability of a player's game currencies and assets through their ecosystem profile's managed or connected external wallet. This means ecosystem-level or game-specific assets can be interoperated across other games in a secure, permissioned, and standard way.
+- **Achievement Tracking**: Full support for soul-bound tokens at the player's ecosystem-level profile, such as achievements, "XP," rank, etc, across games.
+
+<div align="center">
+  <img
+    alt="oauth ecosystem"
+    src="https://blog-cms.openfort.xyz/uploads/oauth_ecosystem_signin_86a116d632.png"
+    width="50%"
+    height="50%"
+  />
+  <label>
+    OAuth ecosystem sign in
+  </label>
+</div>
+
+
+
+### Example Flows & Implementation Patterns
+
+We have a few possible patterns you may choose to integrate your single sign-on flow through, depending on your Ecosystem and game needs:
+
+**Redirect Pattern**
+
+Redirect patterns are common for web-based games or UI's where your players need to be redirected to some page on your game's website, or perhaps a settings page on the web for your game.
+
+Setting the redirect_uri, your game may choose to link the "Register" or "Login" button from your game's website to the Ecosystem auth flow page. 
+From there, your player would be able to login or register. After successfully logging in or registering, the player would be redirected to the redirectUri you set in the auth page's query parameters.
+
+This redirect uri will have the authenticated player's jwtToken and player. 
+For example, a redirect uri may be https://mygame.com/game and the resulting redirect will become https://mygame.com/game#token=PLAYER_ACCESS_TOKEN&player=PLAYER_ID. 
+From here, your game's webpage logic can grab the player jwtToken and player from the fragment (#) url parameters and perform any final login/authentication logic needed for your game.
+
+**Embed Pattern**
+
+<div align="center">
+  <img
+    alt="popup oauth ecosystem"
+    src="https://blog-cms.openfort.xyz/uploads/popup_oauth_ecosystem_22c139adf2.png"
+    width="80%"
+    height="80%"
+  />
+    <label>
+    OAuth ecosystem embedded in-game
+  </label>
+</div>
+
+The embed pattern is intended for mobile apps, native games, or any non-web implementations.
+
+For example, you may choose to build a mobile app or desktop game and use our auth page for login or registration.
+
+You can use the embed pattern by excluding the redirect_uri from the auth page's query parameters. 
+This allows you to do an in-app or in-game web browser/modal window that opens your Ecosystem auth page. 
+Your player would complete the specified flow (login or registration) and once finished the player's jwtToken and player will be set and update the auth page's URL.
+
+You can use a url change listener for your in-app or in-game browser modal and wait for the #jwtToken=, &player= fragment properties to be set on the url. 
+Once set, you can extract the player's jwtToken and player and perform any additional auth logic for your game from there and automatically close the browser modal/pop-up.
+
+## Quickstart
+
+Check out our working working example on how to create a gaming ecosystem: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/oauth-game-ecosystem) and [video walkthrough](https://youtu.be/s8wMDpTTzJE).

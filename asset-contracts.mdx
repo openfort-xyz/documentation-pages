@@ -38,7 +38,7 @@ Verification ensures that the smart contracts are legitimate, secure, and compat
 
 ## Quickstart
 
-In this guide, we'll use a simple [ERC721](https://eips.ethereum.org/EIPS/eip-721) contract on the [Mumbai network](https://mumbai.polygonscan.com/) deployed at [0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0](https://mumbai.polygonscan.com/address/0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0).
+In this guide, we'll use a simple [ERC721](https://eips.ethereum.org/EIPS/eip-721) contract on the [Mumbai network](https://mumbai.polygonscan.com/) deployed at [0x380...6B7f63AC0](https://mumbai.polygonscan.com/address/0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0).
 
 ### 1. (Dashboard) Add an asset contract to your game project
 
@@ -49,10 +49,20 @@ Create a new contract by clicking the `Add contract` button in the [Asset contra
 - The address of the contract.
 - The Application Binary Interface (ABI) of the contract (if not verified in the block explorer of that network).
 
+<div align="center">
+  <img
+    alt="DashboardAddContract"
+    src="https://blog-cms.openfort.xyz/uploads/adding_contract_dashboard_09dce2f83c.png"
+    width="50%"
+    height="50%"
+  />
+</div>
+
 <Note>
   <strong>Note: </strong>
-  <br /> The ABI is automatically fetched for you when you enter the address of the contract. If the contract is not verified on the block explorer, you will need to enter the ABI manually.
+  <br /> If the contract is not verified on the block explorer, you will need to enter the ABI manually. If the contract you want to interact with is a proxy contract, you will need to enter the ABI of the implementation contract.
 </Note>
+
 
 ### 1. (API) Add an asset contract to your game project
 
@@ -63,9 +73,13 @@ You can also add an asset by directly using the API:
   curl https://api.openfort.xyz/v1/contracts \
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
     -d name="SimpleNFT" \
-    -d address=0x416c...354D \
-    -d chain_id=80001
+    -d address="0x416c...354D" \
+    -d chain_id="80001"
   ```
 </CodeGroup>
 
-Check the guide on [Execute Transaction](/execute-transactions) to know how to mint and transfer the asset into an account.
+### 2. Conclusion
+
+We now have added an asset contract that we can interact with when using the Openfort API.
+
+Check the guide on [Execute Transaction](/execute-transactions) to know how to mint and transfer the asset with an account.

@@ -148,3 +148,20 @@ If any of the interactions fail, the entire batch will fail and no changes will 
     -d interactions[1][function_args]="0x32B7...213d"
   ```
 </CodeGroup>
+
+## Quickstart
+
+We now have a fully working implementation that allows us to mint assets for a player. 
+Nevertheless, there are a two main disadvantages of this current implementation:
+
+- **The newly created account will need to have native tokens to pay for the transaction fees:**
+
+  We can use Openfort policies to sponsor transactions for our users.
+  This way, we can pay for the transaction fees of our users. 
+  Learn how to use them at [Sponsoring Transactions](/gas-payments).
+
+- **When non-custodial, the owner will need to sign each transaction introducing friction (e.g. pop-ups) to the user experience):**
+  
+  We can use Openfort session keys to create scoped session keys in client side. 
+  This way, we can sign transactions without UX interruptions.
+  Learn how to use them at [Session Keys](/session-keys).

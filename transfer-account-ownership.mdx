@@ -3,9 +3,119 @@ export const description =
 
 # Transfer Account Ownership
 
-<Note>
-  <strong>Coming soon!</strong>
-  <br /> Checkout out our [video walkthrough](https://youtu.be/xBzl8hk__P8)
-  and sample [GitHub source](https://github.com/openfort-xyz/samples/tree/main/ssv-social-nextjs)
-  to see how to implement this.
-</Note>
+With Openfort, you can change the ownership of an account from one address to another. 
+Finally, your players can take ownership of their account without ever having to go through exposing a private key.
+Secure, frictionless, and easy.
+
+## Overview
+
+The never ending battle between security and usability is a constant in the blockchain space. 
+Specially when it comes to account ownership and custody.
+
+Openfort solves this problem by offering a flexible custody model that allows for a secure and frictionless way of transfering account ownership.
+
+There are 2 steps involved in transfering account ownership:
+
+- transferOwnership: starts the ownership transfer of the contract to a new account. Called through the API and performed by Openfort.
+- acceptOwnership: the new owner accepts the ownership transfer. Performed in the client side by the new owner.
+
+### How Transfer Ownership Works
+
+Openfort accounts implement [Ownable2Step](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable2Step) from [Openzeppelin](https://www.openzeppelin.com/) to create a secure way of transfering account ownership.
+
+You can check out the code that allows for this behaviour in their [GitHub repository](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable2Step.sol).
+
+## Quickstart
+
+This guide will go though all the necessary steps to transfer account ownership.
+
+### 1. Set up Openfort - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span>
+
+Use our official libraries to access the Openfort API from your application:
+
+<CodeGroup title="Install Openfort" label={'Command line'}>
+  ```bash {{ title: 'Command line' }}
+  npm install @openfort/openfort-node --save
+  ```
+</CodeGroup>
+
+
+<CodeGroup title="Initialize '@openfort/openfort-node' wih your secret key" label={'index.js'}>
+  ```js {{ language: 'js', title: 'Node.js' }}
+  const openfort = require('@openfort/openfort-node')('sk_test_...');
+  ```
+</CodeGroup>
+
+### 2. Request transfer ownership - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Server side</span>
+
+Openfort will performa  [`transferOwnership`](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable2Step-transferOwnership-address-) operation to transfer the ownership of the account from the current owner to the new owner.
+
+The `policy` parameter is a policy that will be used to sponsor the transaction. 
+You can find more information about policies in our [documentation](https://www.openfort.xyz/docs/api/policies).
+Bear in mind this policy needs to have a `account_functions` policy rule to allow the sponsorship of this operation.
+
+<CodeGroup title="Request transfer ownership" tag="POST" label="/v1/players/:id/transfer-ownership">
+  ```bash {{ title: 'cURL' }}
+  curl https://api.openfort.xyz/v1/players/pla_.../transfer-ownership \
+    -H "Authorization: Bearer $YOUR_SECRET_KEY" \
+    -d chain_id=80001 \
+    -d new_owner_address="0x416c...354D" \
+    -d policy="pol_..."
+  ```
+  ```js {{ language: 'js', title: 'Node.js' }}
+  const playerId = "pla_...";
+  const policy = "pol_...";
+  const chainId = 80001;
+  const newOwnerAddress = "0x416c...354D";
+  const playerTransferOwnership = await openfort.players.transferAccountOwnership({
+      playerId: playerId,
+      policy: policy,
+      chainId: chainId,
+      newOwnerAddress: newOwnerAddress,
+    });
+  ``` 
+</CodeGroup>
+
+### 3. Accept account ownership - <span className='mr-2 dark:bg-gray-400/10 dark:text-gray-400 font-medium bg-gray-200 text-gray-600 rounded-sm p-1 text-xs'>Client side</span>
+
+
+Using [Wagmi](https://wagmi.sh/) React hooks, you can accept the account ownership by performing an [`acceptOwnership`](https://docs.openzeppelin.com/contracts/4.x/api/access#Ownable2Step-acceptOwnership--) operation.
+
+Find a working example of how to accept account ownership in our GitHub repository [component sample](https://github.com/openfort-xyz/samples/blob/main/ssv-social-nextjs/components/accept-ownership.tsx).
+
+<CodeGroup title="Accept account ownership from client side" label={'index.js'}>
+  ```js {{ language: 'js', title: 'index.js' }}
+  import {
+    usePrepareContractWrite,
+    useContractWrite,
+    useWaitForTransaction,
+  } from 'wagmi'
+
+  const { config } = usePrepareContractWrite({
+    address: accountAddress,
+    abi: [
+      {
+        inputs: [],
+        name: "acceptOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+    ],
+    functionName: 'acceptOwnership',
+  })
+  const { data, write } = useContractWrite(config)
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  })
+  ```
+</CodeGroup>
+
+### 4. Conclusion
+
+For more information about how to use the sesion key endpoints, you can visit our [API documentation](https://www.openfort.xyz/docs/api/players#transfer-account-ownership).
+
+Check out our working working examples of this quickstart:
+- Sample registering a session key with an account with a self-custodied signer: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/ssv-social-nextjs) and [video walkthrough](https://youtu.be/xBzl8hk__P8?t=264).
+

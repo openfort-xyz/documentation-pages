@@ -89,14 +89,14 @@ After creating a player, you'll receive a `player_id` that you can use from this
 
 ### 3. Add the contract you want to interact with
 
-Add [Asset Contract](/asset-contracts) to your game project. In this example, we'll use a simple [ERC721](https://eips.ethereum.org/EIPS/eip-721) contract on the [Mumbai network](https://mumbai.polygonscan.com/) deployed at [0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0](https://mumbai.polygonscan.com/address/0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0).
+Add [Asset Contract](/asset-contracts) to your game project. In this example, we'll use a simple [ERC721](https://eips.ethereum.org/EIPS/eip-721) contract on the [Mumbai network](https://mumbai.polygonscan.com/) deployed at [0x380...AC0](https://mumbai.polygonscan.com/address/0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0).
 
 <CodeGroup title="Add an asset contract" tag="POST" label="/v1/contracts">
   ```bash {{ title: 'cURL' }}
   curl https://api.openfort.xyz/v1/contracts \
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
-    -d chain_id=80001 \
-    -d address="0x38090d1636069c0ff1Af6bc1737Fb996B7f63AC0" \
+    -d chain_id="80001" \
+    -d address="0x380...3AC0" \
     -d name="Simple NFT" \
     -d description="tutorial NFT asset"
   ```
@@ -112,7 +112,7 @@ This will return a `contract_id` that you can use from this point on to interact
     -H "Authorization: Bearer $YOUR_SECRET_KEY" \
     -d player=pla_... \
     -d optimistic=true \
-    -d chain_id=80001 \
+    -d chain_id="80001" \
     -d "interactions[0][contract]=con_..." \
     -d "interactions[0][function_name]=mint" \
     -d "interactions[0][function_args][0]=pla_..."
@@ -244,5 +244,5 @@ Learn how to use them at [Session Keys](/session-keys).
 
 
 Check out our working working examples of this quickstart:
-- Sample self-custodial account creating and asset minting application: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/rainbow-ssv-nextjs) and [video demo](https://youtu.be/rh2E02PATlU).
-- Sample email/social login with custodial account creating and asset minting application: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/ssv-social-nextjs) and [video demo](https://youtu.be/xBzl8hk__P8).
+- Sample self-custodial account creating and asset minting application: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/rainbow-ssv-nextjs) and [video walkthrough](https://youtu.be/rh2E02PATlU).
+- Sample email/social login with custodial account creating and asset minting application: [GitHub source](https://github.com/openfort-xyz/samples/tree/main/ssv-social-nextjs) and [video walkthrough](https://youtu.be/xBzl8hk__P8).
